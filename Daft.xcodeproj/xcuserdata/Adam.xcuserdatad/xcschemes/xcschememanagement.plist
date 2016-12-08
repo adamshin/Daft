@@ -9,10 +9,20 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>DaftTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>66DB70E01DF8FD2E00FF3A5B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>66DB70F51DF9062800FF3A5B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

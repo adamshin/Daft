@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		66DB70E51DF8FD2E00FF3A5B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70E41DF8FD2E00FF3A5B /* main.swift */; };
+		66DB70ED1DF900A000FF3A5B /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EC1DF900A000FF3A5B /* Lexer.swift */; };
+		66DB70EF1DF900D200FF3A5B /* LexerInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EE1DF900D200FF3A5B /* LexerInput.swift */; };
+		66DB70F11DF902A700FF3A5B /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70F01DF902A700FF3A5B /* Token.swift */; };
+		66DB70F91DF9062800FF3A5B /* LexerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70F81DF9062800FF3A5B /* LexerTests.swift */; };
+		66DB70FE1DF90B6E00FF3A5B /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EC1DF900A000FF3A5B /* Lexer.swift */; };
+		66DB70FF1DF90B6E00FF3A5B /* LexerInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EE1DF900D200FF3A5B /* LexerInput.swift */; };
+		66DB71001DF90B6E00FF3A5B /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70F01DF902A700FF3A5B /* Token.swift */; };
+		66DB71021DF90F2F00FF3A5B /* Token+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB71011DF90F2F00FF3A5B /* Token+Equatable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,10 +33,24 @@
 /* Begin PBXFileReference section */
 		66DB70E11DF8FD2E00FF3A5B /* Daft */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Daft; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DB70E41DF8FD2E00FF3A5B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		66DB70EC1DF900A000FF3A5B /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
+		66DB70EE1DF900D200FF3A5B /* LexerInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LexerInput.swift; sourceTree = "<group>"; };
+		66DB70F01DF902A700FF3A5B /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		66DB70F61DF9062800FF3A5B /* DaftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		66DB70F81DF9062800FF3A5B /* LexerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerTests.swift; sourceTree = "<group>"; };
+		66DB70FA1DF9062800FF3A5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66DB71011DF90F2F00FF3A5B /* Token+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Token+Equatable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		66DB70DE1DF8FD2E00FF3A5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66DB70F31DF9062800FF3A5B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -42,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				66DB70E31DF8FD2E00FF3A5B /* Daft */,
+				66DB70F71DF9062800FF3A5B /* DaftTests */,
 				66DB70E21DF8FD2E00FF3A5B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				66DB70E11DF8FD2E00FF3A5B /* Daft */,
+				66DB70F61DF9062800FF3A5B /* DaftTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,9 +81,30 @@
 		66DB70E31DF8FD2E00FF3A5B /* Daft */ = {
 			isa = PBXGroup;
 			children = (
+				66DB70EB1DF9008E00FF3A5B /* Lexer */,
 				66DB70E41DF8FD2E00FF3A5B /* main.swift */,
 			);
 			path = Daft;
+			sourceTree = "<group>";
+		};
+		66DB70EB1DF9008E00FF3A5B /* Lexer */ = {
+			isa = PBXGroup;
+			children = (
+				66DB70EC1DF900A000FF3A5B /* Lexer.swift */,
+				66DB70EE1DF900D200FF3A5B /* LexerInput.swift */,
+				66DB70F01DF902A700FF3A5B /* Token.swift */,
+			);
+			name = Lexer;
+			sourceTree = "<group>";
+		};
+		66DB70F71DF9062800FF3A5B /* DaftTests */ = {
+			isa = PBXGroup;
+			children = (
+				66DB70F81DF9062800FF3A5B /* LexerTests.swift */,
+				66DB71011DF90F2F00FF3A5B /* Token+Equatable.swift */,
+				66DB70FA1DF9062800FF3A5B /* Info.plist */,
+			);
+			path = DaftTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -82,6 +127,23 @@
 			productReference = 66DB70E11DF8FD2E00FF3A5B /* Daft */;
 			productType = "com.apple.product-type.tool";
 		};
+		66DB70F51DF9062800FF3A5B /* DaftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66DB70FB1DF9062800FF3A5B /* Build configuration list for PBXNativeTarget "DaftTests" */;
+			buildPhases = (
+				66DB70F21DF9062800FF3A5B /* Sources */,
+				66DB70F31DF9062800FF3A5B /* Frameworks */,
+				66DB70F41DF9062800FF3A5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DaftTests;
+			productName = DaftTests;
+			productReference = 66DB70F61DF9062800FF3A5B /* DaftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -93,6 +155,11 @@
 				ORGANIZATIONNAME = "Adam Shin";
 				TargetAttributes = {
 					66DB70E01DF8FD2E00FF3A5B = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 56ENZLRZN2;
+						ProvisioningStyle = Automatic;
+					};
+					66DB70F51DF9062800FF3A5B = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 56ENZLRZN2;
 						ProvisioningStyle = Automatic;
@@ -112,16 +179,42 @@
 			projectRoot = "";
 			targets = (
 				66DB70E01DF8FD2E00FF3A5B /* Daft */,
+				66DB70F51DF9062800FF3A5B /* DaftTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66DB70F41DF9062800FF3A5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		66DB70DD1DF8FD2E00FF3A5B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66DB70EF1DF900D200FF3A5B /* LexerInput.swift in Sources */,
+				66DB70ED1DF900A000FF3A5B /* Lexer.swift in Sources */,
 				66DB70E51DF8FD2E00FF3A5B /* main.swift in Sources */,
+				66DB70F11DF902A700FF3A5B /* Token.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66DB70F21DF9062800FF3A5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66DB70FF1DF90B6E00FF3A5B /* LexerInput.swift in Sources */,
+				66DB70FE1DF90B6E00FF3A5B /* Lexer.swift in Sources */,
+				66DB70F91DF9062800FF3A5B /* LexerTests.swift in Sources */,
+				66DB71021DF90F2F00FF3A5B /* Token+Equatable.swift in Sources */,
+				66DB71001DF90B6E00FF3A5B /* Token.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +327,34 @@
 			};
 			name = Release;
 		};
+		66DB70FC1DF9062800FF3A5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 56ENZLRZN2;
+				INFOPLIST_FILE = DaftTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.adamshin.DaftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		66DB70FD1DF9062800FF3A5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 56ENZLRZN2;
+				INFOPLIST_FILE = DaftTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.adamshin.DaftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -251,6 +372,14 @@
 			buildConfigurations = (
 				66DB70E91DF8FD2E00FF3A5B /* Debug */,
 				66DB70EA1DF8FD2E00FF3A5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		66DB70FB1DF9062800FF3A5B /* Build configuration list for PBXNativeTarget "DaftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66DB70FC1DF9062800FF3A5B /* Debug */,
+				66DB70FD1DF9062800FF3A5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
