@@ -9,8 +9,9 @@
 import Foundation
 
 enum Token {
-    case identifier(value: String)
-    case intLiteral(value: String)
+    case identifier(String)
+    case intLiteral(String)
+    case stringLiteral(String)
     
     case binaryOperator(type: BinaryOperatorType)
     

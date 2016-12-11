@@ -9,7 +9,9 @@
 import Foundation
 
 enum LexerError: Error {
+    case endOfFile
     case unexpectedCharacter
+    case internalError
 }
 
 class Lexer {
@@ -21,13 +23,15 @@ class Lexer {
     }
     
     func nextToken() throws -> Token? {
-        skipWhitespace(in: input)
+        skipWhitespace()
         
         guard let char = input.nextChar() else { return nil }
         
-        if isIdentifierCharacter(char) { return readIdentifierOrKeyword(from: input) }
-        if isIntLiteralCharacter(char) { return readIntLiteral(from: input) }
-        if isOperatorCharacter(char) { return try readBinaryOperator(from: input) }
+        if isIdentifierCharacter(char) { return readIdentifierOrKeyword() }
+        if isIntLiteralCharacter(char) { return readIntLiteral() }
+        if isStringDelimiter(char) { return try readStringLiteral() }
+        
+        if isOperatorCharacter(char) { return try readBinaryOperator() }
         
         input.consumeChar()
         switch char {
@@ -45,13 +49,13 @@ class Lexer {
         }
     }
     
-    private func skipWhitespace(in input: LexerInput) {
+    private func skipWhitespace() {
         while let char = input.nextChar(), isWhitespaceCharacter(char) {
             input.consumeChar()
         }
     }
     
-    private func readIdentifierOrKeyword(from input: LexerInput) -> Token {
+    private func readIdentifierOrKeyword() -> Token {
         var string = ""
         while let char = input.nextChar(), isIdentifierCharacter(char) {
             input.consumeChar()
@@ -61,21 +65,40 @@ class Lexer {
         switch string {
         case "let": return .letKeyword
         case "func": return .funcKeyword
-        default: return .identifier(value: string)
+        default: return .identifier(string)
         }
     }
     
-    private func readIntLiteral(from input: LexerInput) -> Token {
+    private func readIntLiteral() -> Token {
         var string = ""
         while let char = input.nextChar(), isIntLiteralCharacter(char) {
             input.consumeChar()
             string.append(char)
         }
-        return .intLiteral(value: string)
+        return .intLiteral(string)
     }
     
-    private func readBinaryOperator(from input: LexerInput) throws -> Token {
-        guard let char = input.nextChar() else { throw LexerError.unexpectedCharacter }
+    private func readStringLiteral() throws -> Token {
+        guard let char = input.nextChar() else { throw LexerError.endOfFile }
+        guard isStringDelimiter(char) else { throw LexerError.internalError }
+        
+        input.consumeChar()
+        
+        var string = ""
+        while let char = input.nextChar() {
+            input.consumeChar()
+            
+            if isStringDelimiter(char) {
+                return .stringLiteral(string)
+            }
+            string.append(char)
+        }
+        
+        throw LexerError.endOfFile
+    }
+    
+    private func readBinaryOperator() throws -> Token {
+        guard let char = input.nextChar() else { throw LexerError.endOfFile }
         input.consumeChar()
         
         switch char {
@@ -104,6 +127,10 @@ private func isIntLiteralCharacter(_ char: Character) -> Bool {
     case "0"..."9": return true
     default: return false
     }
+}
+
+private func isStringDelimiter(_ char: Character) -> Bool {
+    return char == "\""
 }
 
 private func isOperatorCharacter(_ char: Character) -> Bool {

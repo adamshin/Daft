@@ -15,6 +15,8 @@ func ==(lhs: Token, rhs: Token) -> Bool {
     switch (lhs, rhs) {
     case (.identifier(let a), .identifier(let b)) where a == b: return true
     case (.intLiteral(let a), .intLiteral(let b)) where a == b: return true
+    case (.stringLiteral(let a), .stringLiteral(let b)) where a == b: return true
+        
     case (.binaryOperator(let a), .binaryOperator(let b)) where a == b: return true
         
     case (.funcKeyword, .funcKeyword): return true

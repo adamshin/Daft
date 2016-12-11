@@ -43,37 +43,49 @@ let testCases = [
         input: "let foo = 42",
         expected: [
             .letKeyword,
-            .identifier(value: "foo"),
+            .identifier("foo"),
             .assign,
-            .intLiteral(value: "42"),
+            .intLiteral("42"),
         ]
     ),
     LexerTestCase(
-        input: "(123 + 45) - 6",
+        input: "(123 + 45) - 6 + 78",
         expected: [
             .leftParen,
-            .intLiteral(value: "123"),
+            .intLiteral("123"),
             .binaryOperator(type: .addition),
-            .intLiteral(value: "45"),
+            .intLiteral("45"),
             .rightParen,
             .binaryOperator(type: .subtraction),
-            .intLiteral(value: "6"),
+            .intLiteral("6"),
+            .binaryOperator(type: .addition),
+            .intLiteral("78"),
         ]
     ),
     LexerTestCase(
         input: "func   asdf(a,b)\n\n {}",
         expected: [
             .funcKeyword,
-            .identifier(value: "asdf"),
+            .identifier("asdf"),
             .leftParen,
-            .identifier(value: "a"),
+            .identifier("a"),
             .comma,
-            .identifier(value: "b"),
+            .identifier("b"),
             .rightParen,
             .newline,
             .newline,
             .leftBrace,
             .rightBrace,
+        ]
+    ),
+    LexerTestCase(
+        input: "a(\"bc123\") \"hello   world\"",
+        expected: [
+            .identifier("a"),
+            .leftParen,
+            .stringLiteral("bc123"),
+            .rightParen,
+            .stringLiteral("hello   world"),
         ]
     ),
 ]
