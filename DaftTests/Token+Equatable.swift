@@ -23,13 +23,13 @@ func ==(lhs: Token, rhs: Token) -> Bool {
     case (.letKeyword, .letKeyword): return true
         
     case (.assign, .assign): return true
-    case (.comma, .comma): return true
         
     case (.leftParen, .leftParen): return true
     case (.rightParen, .rightParen): return true
     case (.leftBrace, .leftBrace): return true
     case (.rightBrace, .rightBrace): return true
         
+    case (.comma, .comma): return true
     case (.newline, .newline): return true
         
     default: return false

@@ -13,23 +13,28 @@ enum Token {
     case intLiteral(String)
     case stringLiteral(String)
     
-    case binaryOperator(type: BinaryOperatorType)
+    case binaryOperator(BinaryOperatorType)
     
     case funcKeyword
     case letKeyword
     
     case assign
-    case comma
     
     case leftParen
     case rightParen
     case leftBrace
     case rightBrace
     
+    case comma
     case newline
 }
 
 enum BinaryOperatorType {
     case addition
     case subtraction
+    
+    case lessThan
+    case greaterThan
+    
+    case equality
 }

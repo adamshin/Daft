@@ -11,6 +11,7 @@ import Foundation
 enum LexerError: Error {
     case endOfFile
     case unexpectedCharacter
+    
     case internalError
 }
 
@@ -35,17 +36,15 @@ class Lexer {
         
         input.consumeChar()
         switch char {
-        case "=": return .assign
-        case ",": return .comma
-            
         case "(": return .leftParen
         case ")": return .rightParen
         case "{": return .leftBrace
         case "}": return .rightBrace
             
+        case ",": return .comma
         case "\n": return .newline
         
-        default: return nil
+        default: throw LexerError.unexpectedCharacter
         }
     }
     
@@ -79,8 +78,7 @@ class Lexer {
     }
     
     private func readStringLiteral() throws -> Token {
-        guard let char = input.nextChar() else { throw LexerError.endOfFile }
-        guard isStringDelimiter(char) else { throw LexerError.internalError }
+        guard let char = input.nextChar(), isStringDelimiter(char) else { throw LexerError.internalError }
         
         input.consumeChar()
         
@@ -98,14 +96,24 @@ class Lexer {
     }
     
     private func readBinaryOperator() throws -> Token {
-        guard let char = input.nextChar() else { throw LexerError.endOfFile }
+        guard let char = input.nextChar() else { throw LexerError.internalError }
         input.consumeChar()
         
         switch char {
-        case "+": return .binaryOperator(type: .addition)
-        case "-": return .binaryOperator(type: .subtraction)
+        case "=":
+            if input.nextChar() == "=" {
+                input.consumeChar()
+                return .binaryOperator(.equality)
+            } else {
+                return .assign
+            }
             
-        default: throw LexerError.unexpectedCharacter
+        case "+": return .binaryOperator(.addition)
+        case "-": return .binaryOperator(.subtraction)
+        case "<": return .binaryOperator(.lessThan)
+        case ">": return .binaryOperator(.greaterThan)
+            
+        default: throw LexerError.internalError
         }
     }
     
@@ -135,7 +143,7 @@ private func isStringDelimiter(_ char: Character) -> Bool {
 
 private func isOperatorCharacter(_ char: Character) -> Bool {
     switch char {
-    case "+", "-": return true
+    case "+", "-", "<", ">", "=": return true
     default: return false
     }
 }

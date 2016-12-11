@@ -9,10 +9,78 @@
 import XCTest
 @testable import Daft
 
-struct LexerTestCase {
-    let input: String
-    let expected: [Token]
-}
+// MARK: - Test Cases
+
+let testCases: [(input: String, expected: [Token])] = [
+    (
+        input: "let foo = 42",
+        expected: [
+            .letKeyword,
+            .identifier("foo"),
+            .assign,
+            .intLiteral("42"),
+        ]
+    ),
+    (
+        input: "(123+45) - 6 + 78",
+        expected: [
+            .leftParen,
+            .intLiteral("123"),
+            .binaryOperator(.addition),
+            .intLiteral("45"),
+            .rightParen,
+            .binaryOperator(.subtraction),
+            .intLiteral("6"),
+            .binaryOperator(.addition),
+            .intLiteral("78"),
+        ]
+    ),
+    (
+        input: "func   asdf_jkl(a,b)\n\n {}  ",
+        expected: [
+            .funcKeyword,
+            .identifier("asdf_jkl"),
+            .leftParen,
+            .identifier("a"),
+            .comma,
+            .identifier("b"),
+            .rightParen,
+            .newline,
+            .newline,
+            .leftBrace,
+            .rightBrace,
+        ]
+    ),
+    (
+        input: "a(\"bc123\") \"hello   world\"",
+        expected: [
+            .identifier("a"),
+            .leftParen,
+            .stringLiteral("bc123"),
+            .rightParen,
+            .stringLiteral("hello   world"),
+        ]
+    ),
+    (
+        input: "a=b==c < >",
+        expected: [
+            .identifier("a"),
+            .assign,
+            .identifier("b"),
+            .binaryOperator(.equality),
+            .identifier("c"),
+            .binaryOperator(.lessThan),
+            .binaryOperator(.greaterThan),
+        ]
+    ),
+]
+
+let errorCases: [(input: String, error: LexerError)] = [
+    (input: "\"hello world", error: .endOfFile),
+    (input: "~", error: .unexpectedCharacter),
+]
+
+// MARK: - Test Input
 
 class LexerTestInput: LexerInput {
     
@@ -38,57 +106,7 @@ class LexerTestInput: LexerInput {
     
 }
 
-let testCases = [
-    LexerTestCase(
-        input: "let foo = 42",
-        expected: [
-            .letKeyword,
-            .identifier("foo"),
-            .assign,
-            .intLiteral("42"),
-        ]
-    ),
-    LexerTestCase(
-        input: "(123 + 45) - 6 + 78",
-        expected: [
-            .leftParen,
-            .intLiteral("123"),
-            .binaryOperator(type: .addition),
-            .intLiteral("45"),
-            .rightParen,
-            .binaryOperator(type: .subtraction),
-            .intLiteral("6"),
-            .binaryOperator(type: .addition),
-            .intLiteral("78"),
-        ]
-    ),
-    LexerTestCase(
-        input: "func   asdf(a,b)\n\n {}",
-        expected: [
-            .funcKeyword,
-            .identifier("asdf"),
-            .leftParen,
-            .identifier("a"),
-            .comma,
-            .identifier("b"),
-            .rightParen,
-            .newline,
-            .newline,
-            .leftBrace,
-            .rightBrace,
-        ]
-    ),
-    LexerTestCase(
-        input: "a(\"bc123\") \"hello   world\"",
-        expected: [
-            .identifier("a"),
-            .leftParen,
-            .stringLiteral("bc123"),
-            .rightParen,
-            .stringLiteral("hello   world"),
-        ]
-    ),
-]
+// MARK: - LexerTests
 
 class LexerTests: XCTestCase {
     
@@ -101,10 +119,26 @@ class LexerTests: XCTestCase {
         testCases.forEach { testCase in
             let lexer = Lexer(input: LexerTestInput(string: testCase.input))
             testCase.expected.forEach {
-                let token = try! lexer.nextToken()
-                XCTAssertEqual($0, token)
+                guard let token = try? lexer.nextToken() else { return XCTFail("Lexer threw error on valid input.") }
+                    
+                XCTAssertNotNil(token, "Lexer terminated prematurely.")
+                XCTAssertEqual($0, token, "Lexer returned incorrect token.")
             }
-            XCTAssertNil(try! lexer.nextToken())
+            XCTAssertNil(try! lexer.nextToken(), "Lexer returned extra token(s).")
+        }
+    }
+    
+    func testLexerErrors() {
+        errorCases.forEach { errorCase in
+            let lexer = Lexer(input: LexerTestInput(string: errorCase.input))
+            do {
+                while let _ = try lexer.nextToken() { }
+                XCTFail("Lexer failed to throw error.")
+            } catch let error as LexerError {
+                XCTAssertEqual(error, errorCase.error, "Lexer threw incorrect error.")
+            } catch {
+                XCTFail("Lexer threw unexpected error object.")
+            }
         }
     }
     
