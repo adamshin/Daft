@@ -374,6 +374,7 @@
 				66DB70EA1DF8FD2E00FF3A5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		66DB70FB1DF9062800FF3A5B /* Build configuration list for PBXNativeTarget "DaftTests" */ = {
 			isa = XCConfigurationList;
@@ -382,6 +383,7 @@
 				66DB70FD1DF9062800FF3A5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

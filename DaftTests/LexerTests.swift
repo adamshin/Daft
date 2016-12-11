@@ -62,7 +62,7 @@ let testCases: [(input: String, expected: [Token])] = [
         ]
     ),
     (
-        input: "a=b==c < >",
+        input: "a=b==c < > =====",
         expected: [
             .identifier("a"),
             .assign,
@@ -71,6 +71,9 @@ let testCases: [(input: String, expected: [Token])] = [
             .identifier("c"),
             .binaryOperator(.lessThan),
             .binaryOperator(.greaterThan),
+            .binaryOperator(.equality),
+            .binaryOperator(.equality),
+            .assign,
         ]
     ),
 ]
@@ -79,32 +82,6 @@ let errorCases: [(input: String, error: LexerError)] = [
     (input: "\"hello world", error: .endOfFile),
     (input: "~", error: .unexpectedCharacter),
 ]
-
-// MARK: - Test Input
-
-class LexerTestInput: LexerInput {
-    
-    let string: String
-    var location: String.Index
-    
-    init(string: String) {
-        self.string = string
-        location = string.startIndex
-    }
-    
-    func nextChar() -> Character? {
-        guard location < string.endIndex else { return nil }
-        
-        return string[location]
-    }
-    
-    func consumeChar() {
-        guard location < string.endIndex else { return }
-        
-        location = string.index(location, offsetBy: 1)
-    }
-    
-}
 
 // MARK: - LexerTests
 
@@ -117,7 +94,7 @@ class LexerTests: XCTestCase {
     
     func testLexer() {
         testCases.forEach { testCase in
-            let lexer = Lexer(input: LexerTestInput(string: testCase.input))
+            let lexer = Lexer(input: LexerStringInput(string: testCase.input))
             testCase.expected.forEach {
                 guard let token = try? lexer.nextToken() else { return XCTFail("Lexer threw error on valid input.") }
                     
@@ -130,7 +107,7 @@ class LexerTests: XCTestCase {
     
     func testLexerErrors() {
         errorCases.forEach { errorCase in
-            let lexer = Lexer(input: LexerTestInput(string: errorCase.input))
+            let lexer = Lexer(input: LexerStringInput(string: errorCase.input))
             do {
                 while let _ = try lexer.nextToken() { }
                 XCTFail("Lexer failed to throw error.")

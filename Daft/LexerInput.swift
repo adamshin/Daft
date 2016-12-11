@@ -14,3 +14,27 @@ protocol LexerInput {
     func consumeChar()
     
 }
+
+class LexerStringInput: LexerInput {
+    
+    let string: String
+    var location: String.Index
+    
+    init(string: String) {
+        self.string = string
+        location = string.startIndex
+    }
+    
+    func nextChar() -> Character? {
+        guard location < string.endIndex else { return nil }
+        
+        return string[location]
+    }
+    
+    func consumeChar() {
+        guard location < string.endIndex else { return }
+        
+        location = string.index(location, offsetBy: 1)
+    }
+    
+}
