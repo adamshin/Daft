@@ -78,7 +78,9 @@ class Lexer {
     }
     
     private func readStringLiteral() throws -> Token {
-        guard let char = input.nextChar(), isStringDelimiter(char) else { throw LexerError.internalError }
+        guard let char = input.nextChar(), isStringDelimiter(char) else {
+            throw LexerError.internalError
+        }
         
         input.consumeChar()
         
@@ -96,7 +98,9 @@ class Lexer {
     }
     
     private func readBinaryOperator() throws -> Token {
-        guard let char = input.nextChar() else { throw LexerError.internalError }
+        guard let char = input.nextChar() else {
+            throw LexerError.internalError
+        }
         input.consumeChar()
         
         switch char {

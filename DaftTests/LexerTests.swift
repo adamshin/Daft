@@ -11,7 +11,7 @@ import XCTest
 
 // MARK: - Test Cases
 
-let testCases: [(input: String, expected: [Token])] = [
+private let testCases: [(input: String, expected: [Token])] = [
     (
         input: "let foo = 42",
         expected: [
@@ -78,7 +78,7 @@ let testCases: [(input: String, expected: [Token])] = [
     ),
 ]
 
-let errorCases: [(input: String, error: LexerError)] = [
+private let errorCases: [(input: String, error: LexerError)] = [
     (input: "\"hello world", error: .endOfFile),
     (input: "~", error: .unexpectedCharacter),
 ]
