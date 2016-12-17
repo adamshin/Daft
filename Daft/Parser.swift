@@ -39,14 +39,40 @@ class Parser {
     }
     
     func parseStatement() throws -> ASTStatement {
-        let statement = try parseExpressionStatement()
-        try consume(.semicolon)
+        guard let token = input.nextToken() else { throw ParserError.endOfFile }
         
+        let statement: ASTStatement
+
+        switch token {
+        case .varKeyword:
+            statement = try parseVariableDeclarationStatement()
+        default:
+            statement = try parseExpressionStatement()
+        }
+        
+        try consume(.semicolon)
         return statement
     }
     
     func parseExpressionStatement() throws -> ASTExpressionStatement {
         return try ASTExpressionStatement(expression: parseExpression())
+    }
+    
+    func parseVariableDeclarationStatement() throws -> ASTVariableDeclarationStatement {
+        try consume(.varKeyword)
+        
+        guard let identifierToken = input.nextToken() else { throw ParserError.endOfFile }
+        guard case let .identifier(name) = identifierToken else { throw ParserError.unexpectedToken }
+        
+        input.consumeToken()
+        
+        var expression: ASTExpression?
+        if let token = input.nextToken(), token == .assign {
+            input.consumeToken()
+            expression = try parseExpression()
+        }
+        
+        return ASTVariableDeclarationStatement(name: name, expression: expression)
     }
     
     // MARK: - Expressions
@@ -88,22 +114,27 @@ class Parser {
     }
     
     func parseFunctionArgumentList() throws -> ASTFunctionArgumentList {
-        var arguments = [ASTExpression]()
-        
         try consume(.leftParen)
+        
+        if input.nextToken() == .rightParen {
+            input.consumeToken()
+            return ASTFunctionArgumentList(arguments: [])
+        }
+        
+        var arguments = [ASTExpression]()
+        try arguments.append(parseExpression())
+        
         while input.nextToken() != .rightParen {
-            try arguments.append(parseExpression())
             try consume(.comma)
+            try arguments.append(parseExpression())
         }
         try consume(.rightParen)
         
-        return ASTFunctionArgumentList(arguments: [])
+        return ASTFunctionArgumentList(arguments: arguments)
     }
     
     func parsePrimaryExpression() throws -> ASTPrimaryExpression {
-        guard let token = input.nextToken() else {
-            throw ParserError.endOfFile
-        }
+        guard let token = input.nextToken() else { throw ParserError.endOfFile }
         
         switch token {
         case .leftParen:

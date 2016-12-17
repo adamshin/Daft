@@ -29,6 +29,11 @@ struct ASTExpressionStatement: ASTStatement {
     let expression: ASTExpression
 }
 
+struct ASTVariableDeclarationStatement: ASTStatement {
+    let name: String
+    let expression: ASTExpression?
+}
+
 // MARK: - Expressions
 
 struct ASTBinarySeriesExpression: ASTExpression {

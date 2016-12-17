@@ -32,6 +32,12 @@ extension ASTExpressionStatement {
     }
 }
 
+extension ASTVariableDeclarationStatement {
+    var description: String {
+        return "ASTVariableDeclarationStatement { name: \(name), expression: \(expression?.description ?? "nil") }"
+    }
+}
+
 extension ASTBinarySeriesExpression {
     var description: String {
         return "ASTBinarySeriesExpression { expressions: [\(expressions.map { $0.description }.joined(separator: ", "))], operators: [\(operators.map { $0.description }.joined(separator: ","))] }"

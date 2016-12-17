@@ -43,6 +43,48 @@ private let testCases: [(input: [Token], expected: AST)] = [
     ),
     (
         input: [
+            .varKeyword,
+            .identifier("foo"),
+            .assign,
+            .identifier("bar"),
+            .leftParen,
+            .intLiteral("5"),
+            .rightParen,
+            .semicolon,
+        ],
+        expected: AST(
+            statements: [
+                ASTVariableDeclarationStatement(
+                    name: "foo",
+                    expression: ASTBinarySeriesExpression(
+                        expressions: [
+                            ASTPostfixExpression(
+                                primaryExpression: ASTIdentifierExpression(name: "bar"),
+                                postfixes: [
+                                    ASTFunctionArgumentList(
+                                        arguments: [
+                                            ASTBinarySeriesExpression(
+                                                expressions: [
+                                                    ASTPostfixExpression(
+                                                        primaryExpression: ASTIntLiteralExpression(literal: "5"),
+                                                        postfixes: []
+                                                    )
+                                                ],
+                                                operators: []
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
+                        ],
+                        operators: []
+                    )
+                )
+            ]
+        )
+    ),
+    (
+        input: [
             .intLiteral("1"),
             .binaryOperator(.addition),
             .leftParen,
@@ -109,9 +151,14 @@ class ParserTests: XCTestCase {
     func testParser() {
         testCases.forEach { testCase in
             let parser = Parser(input: ParserArrayInput(tokens: testCase.input))
-            let ast = try! parser.parse()
             
-            XCTAssertEqual(ast.description, testCase.expected.description)
+            do {
+                let ast = try parser.parse()
+                XCTAssertEqual(ast.description, testCase.expected.description)
+            }
+            catch let error {
+                XCTFail("Parser threw error on valid input: \(error)")
+            }
         }
     }
     

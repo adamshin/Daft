@@ -100,11 +100,8 @@ class LexerTests: XCTestCase {
                     guard let token = try lexer.nextToken() else { return XCTFail("Lexer terminated prematurely.") }
                     XCTAssertEqual($0, token, "Lexer returned incorrect token.")
                 }
-                catch let error as LexerError {
+                catch let error {
                     XCTFail("Lexer threw error on valid input: \(error)")
-                }
-                catch {
-                    XCTFail("Lexer threw unrecognized error.")
                 }
             }
             XCTAssertNil(try! lexer.nextToken(), "Lexer returned extra token(s).")
@@ -117,10 +114,12 @@ class LexerTests: XCTestCase {
             do {
                 while let _ = try lexer.nextToken() { }
                 XCTFail("Lexer failed to throw error.")
-            } catch let error as LexerError {
+            }
+            catch let error as LexerError {
                 XCTAssertEqual(error, errorCase.error, "Lexer threw incorrect error.")
-            } catch {
-                XCTFail("Lexer threw unexpected error object.")
+            }
+            catch {
+                XCTFail("Lexer threw unrecognized error.")
             }
         }
     }
