@@ -70,7 +70,7 @@ class Lexer {
         }
         
         switch string {
-        case "let": return .letKeyword
+        case "var": return .varKeyword
         case "func": return .funcKeyword
         default: return .identifier(string)
         }

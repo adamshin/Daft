@@ -13,9 +13,9 @@ import XCTest
 
 private let testCases: [(input: String, expected: [Token])] = [
     (
-        input: "let foo = 42;",
+        input: "var foo = 42;",
         expected: [
-            .letKeyword,
+            .varKeyword,
             .identifier("foo"),
             .assign,
             .intLiteral("42"),

@@ -40,7 +40,63 @@ private let testCases: [(input: [Token], expected: AST)] = [
                 )
             ]
         )
-    )
+    ),
+    (
+        input: [
+            .intLiteral("1"),
+            .binaryOperator(.addition),
+            .leftParen,
+            .intLiteral("2"),
+            .binaryOperator(.addition),
+            .intLiteral("3"),
+            .rightParen,
+            .binaryOperator(.subtraction),
+            .intLiteral("4"),
+            .semicolon,
+        ],
+        expected: AST(
+            statements: [
+                ASTExpressionStatement(
+                    expression: ASTBinarySeriesExpression(
+                        expressions: [
+                            ASTPostfixExpression(
+                                primaryExpression: ASTIntLiteralExpression(literal: "1"),
+                                postfixes: []
+                            ),
+                            ASTPostfixExpression(
+                                primaryExpression: ASTParenthesizedExpression(
+                                    expression: ASTBinarySeriesExpression(
+                                        expressions: [
+                                            ASTPostfixExpression(
+                                                primaryExpression: ASTIntLiteralExpression(literal: "2"),
+                                                postfixes: []
+                                            ),
+                                            ASTPostfixExpression(
+                                                primaryExpression: ASTIntLiteralExpression(literal: "3"),
+                                                postfixes: []
+                                            )
+                                        ],
+                                        operators: [
+                                            .addition,
+                                        ]
+                                    )
+                                ),
+                                postfixes: []
+                            ),
+                            ASTPostfixExpression(
+                                primaryExpression: ASTIntLiteralExpression(literal: "4"),
+                                postfixes: []
+                            )
+                        ],
+                        operators: [
+                            .addition,
+                            .subtraction,
+                        ]
+                    )
+                )
+            ]
+        )
+    ),
 ]
 
 class ParserTests: XCTestCase {

@@ -16,7 +16,7 @@ enum Token {
     case binaryOperator(BinaryOperatorType)
     
     case funcKeyword
-    case letKeyword
+    case varKeyword
     
     case assign
     
@@ -40,7 +40,7 @@ func ==(lhs: Token, rhs: Token) -> Bool {
     case (.binaryOperator(let a), .binaryOperator(let b)) where a == b: return true
         
     case (.funcKeyword, .funcKeyword): return true
-    case (.letKeyword, .letKeyword): return true
+    case (.varKeyword, .varKeyword): return true
         
     case (.assign, .assign): return true
         
