@@ -26,7 +26,7 @@ enum Token {
     case rightBrace
     
     case comma
-    case newline
+    case semicolon
 }
 
 extension Token: Equatable { }
@@ -50,7 +50,7 @@ func ==(lhs: Token, rhs: Token) -> Bool {
     case (.rightBrace, .rightBrace): return true
         
     case (.comma, .comma): return true
-    case (.newline, .newline): return true
+    case (.semicolon, .semicolon): return true
         
     default: return false
     }

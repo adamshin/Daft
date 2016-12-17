@@ -13,12 +13,13 @@ import XCTest
 
 private let testCases: [(input: String, expected: [Token])] = [
     (
-        input: "let foo = 42",
+        input: "let foo = 42;",
         expected: [
             .letKeyword,
             .identifier("foo"),
             .assign,
             .intLiteral("42"),
+            .semicolon,
         ]
     ),
     (
@@ -45,8 +46,6 @@ private let testCases: [(input: String, expected: [Token])] = [
             .comma,
             .identifier("b"),
             .rightParen,
-            .newline,
-            .newline,
             .leftBrace,
             .rightBrace,
         ]
@@ -62,7 +61,7 @@ private let testCases: [(input: String, expected: [Token])] = [
         ]
     ),
     (
-        input: "a=b==c < > =====",
+        input: "a=b==c < > ===;==",
         expected: [
             .identifier("a"),
             .assign,
@@ -72,8 +71,9 @@ private let testCases: [(input: String, expected: [Token])] = [
             .binaryOperator(.lessThan),
             .binaryOperator(.greaterThan),
             .binaryOperator(.equality),
-            .binaryOperator(.equality),
             .assign,
+            .semicolon,
+            .binaryOperator(.equality),
         ]
     ),
 ]
@@ -96,10 +96,16 @@ class LexerTests: XCTestCase {
         testCases.forEach { testCase in
             let lexer = Lexer(input: LexerStringInput(string: testCase.input))
             testCase.expected.forEach {
-                guard let token = try? lexer.nextToken() else { return XCTFail("Lexer threw error on valid input.") }
-                    
-                XCTAssertNotNil(token, "Lexer terminated prematurely.")
-                XCTAssertEqual($0, token, "Lexer returned incorrect token.")
+                do {
+                    guard let token = try lexer.nextToken() else { return XCTFail("Lexer terminated prematurely.") }
+                    XCTAssertEqual($0, token, "Lexer returned incorrect token.")
+                }
+                catch let error as LexerError {
+                    XCTFail("Lexer threw error on valid input: \(error)")
+                }
+                catch {
+                    XCTFail("Lexer threw unrecognized error.")
+                }
             }
             XCTAssertNil(try! lexer.nextToken(), "Lexer returned extra token(s).")
         }

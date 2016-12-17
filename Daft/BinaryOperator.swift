@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum BinaryOperatorType {
+enum BinaryOperatorType: String {
     case addition
     case subtraction
     

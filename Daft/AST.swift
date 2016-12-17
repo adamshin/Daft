@@ -8,14 +8,18 @@
 
 import Foundation
 
-protocol ASTStatement { }
-protocol ASTPostfix { }
-protocol ASTExpression { }
-protocol ASTPrimaryExpression { }
+protocol ASTNode {
+    var description: String { get }
+}
+
+protocol ASTStatement: ASTNode { }
+protocol ASTPostfix: ASTNode { }
+protocol ASTExpression: ASTNode { }
+protocol ASTPrimaryExpression: ASTNode { }
 
 // MARK: - AST
 
-struct AST {
+struct AST: ASTNode {
     let statements: [ASTStatement]
 }
 
@@ -32,7 +36,7 @@ struct ASTBinarySeriesExpression: ASTExpression {
     let operators: [BinaryOperatorType]
 }
 
-struct ASTPostfixExpression {
+struct ASTPostfixExpression: ASTNode {
     let primaryExpression: ASTPrimaryExpression
     let postfixes: [ASTPostfix]
 }

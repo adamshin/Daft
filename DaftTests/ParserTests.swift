@@ -16,15 +16,22 @@ private let testCases: [(input: [Token], expected: AST)] = [
         input: [
             .identifier("foo"),
             .binaryOperator(.addition),
-            .intLiteral("42")
+            .intLiteral("42"),
+            .semicolon,
         ],
         expected: AST(
             statements: [
                 ASTExpressionStatement(
                     expression: ASTBinarySeriesExpression(
                         expressions: [
-                            ASTIdentifierExpression(name: "foo"),
-                            ASTIntLiteralExpression(literal: "42")
+                            ASTPostfixExpression(
+                                primaryExpression: ASTIdentifierExpression(name: "foo"),
+                                postfixes: []
+                            ),
+                            ASTPostfixExpression(
+                                primaryExpression: ASTIntLiteralExpression(literal: "42"),
+                                postfixes: []
+                            )
                         ],
                         operators: [
                             .addition
@@ -43,12 +50,13 @@ class ParserTests: XCTestCase {
         continueAfterFailure = false
     }
     
-//    func testParser() {
-//        testCases.forEach { testCase in
-//            let tokens = testCase.input
-//            let parser = Parser(input: ParserArrayInput(tokens: []))
-//            let ast = try! parser.parse()
-//        }
-//    }
+    func testParser() {
+        testCases.forEach { testCase in
+            let parser = Parser(input: ParserArrayInput(tokens: testCase.input))
+            let ast = try! parser.parse()
+            
+            XCTAssertEqual(ast.description, testCase.expected.description)
+        }
+    }
     
 }

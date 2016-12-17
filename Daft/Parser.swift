@@ -39,7 +39,10 @@ class Parser {
     }
     
     func parseStatement() throws -> ASTStatement {
-        return try parseExpressionStatement()
+        let statement = try parseExpressionStatement()
+        try consume(.semicolon)
+        
+        return statement
     }
     
     func parseExpressionStatement() throws -> ASTExpressionStatement {
@@ -107,12 +110,15 @@ class Parser {
             return try parseParenthesizedExpression()
             
         case let .intLiteral(literal):
+            input.consumeToken()
             return ASTIntLiteralExpression(literal: literal)
             
         case let .stringLiteral(literal):
+            input.consumeToken()
             return ASTStringLiteralExpression(literal: literal)
             
         case let .identifier(name):
+            input.consumeToken()
             return ASTIdentifierExpression(name: name)
             
         default:

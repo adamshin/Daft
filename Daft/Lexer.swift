@@ -23,6 +23,14 @@ class Lexer {
         self.input = input
     }
     
+    func lex() throws -> [Token] {
+        var tokens = [Token]()
+        while let token = try nextToken() {
+            tokens.append(token)
+        }
+        return tokens
+    }
+    
     func nextToken() throws -> Token? {
         skipWhitespace()
         
@@ -42,7 +50,7 @@ class Lexer {
         case "}": return .rightBrace
             
         case ",": return .comma
-        case "\n": return .newline
+        case ";": return .semicolon
         
         default: throw LexerError.unexpectedCharacter
         }
@@ -124,7 +132,7 @@ class Lexer {
 }
 
 private func isWhitespaceCharacter(_ char: Character) -> Bool {
-    return String(char).rangeOfCharacter(from: .whitespaces) != nil
+    return String(char).rangeOfCharacter(from: .whitespacesAndNewlines) != nil
 }
 
 private func isIdentifierCharacter(_ char: Character) -> Bool {
