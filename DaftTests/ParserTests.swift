@@ -76,13 +76,17 @@ class ParserTests: XCTestCase {
                 input: "if (a) { foo; bar; } else if (b) { baz; } else { spam; } zip;",
                 expected: program([
                     ifStatement(
-                        binarySeries(postfix(identifier("a"))),
+                        condition(
+                            binarySeries(postfix(identifier("a")))
+                        ),
                         codeBlock([
                             expression(binarySeries(postfix(identifier("foo")))),
                             expression(binarySeries(postfix(identifier("bar")))),
                         ]),
                         elseIf(ifStatement(
-                            binarySeries(postfix(identifier("b"))),
+                            condition(
+                                binarySeries(postfix(identifier("b")))
+                            ),
                             codeBlock([
                                 expression(binarySeries(postfix(identifier("baz")))),
                             ]),

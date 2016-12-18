@@ -87,21 +87,25 @@ private let testCases = [
         ]
     ),
     LexerTestCase(
-        input: "if (a) { b; } else { c; }",
+        input: "{ b; } { c (d)",
         expected: [
-            .ifKeyword,
-            .leftParen,
-            .identifier("a"),
-            .rightParen,
             .leftBrace,
             .identifier("b"),
             .semicolon,
             .rightBrace,
-            .elseKeyword,
             .leftBrace,
             .identifier("c"),
-            .semicolon,
-            .rightBrace,
+            .leftParen,
+            .identifier("d"),
+            .rightParen,
+            ]
+    ),
+    LexerTestCase(
+        input: "if else while",
+        expected: [
+            .ifKeyword,
+            .elseKeyword,
+            .whileKeyword,
         ]
     ),
 ]

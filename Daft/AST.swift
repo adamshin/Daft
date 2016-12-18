@@ -24,10 +24,14 @@ struct ASTProgram: ASTNode {
     let statements: [ASTStatement]
 }
 
-// MARK: - Code Block
+// MARK: - Structure
 
 struct ASTCodeBlock: ASTNode {
     let statements: [ASTStatement]
+}
+
+struct ASTConditionClause: ASTNode {
+    let expression: ASTExpression
 }
 
 // MARK: - Statements
@@ -42,7 +46,7 @@ struct ASTVariableDeclarationStatement: ASTStatement {
 }
 
 struct ASTIfStatement: ASTStatement {
-    let condition: ASTExpression
+    let condition: ASTConditionClause
     let codeBlock: ASTCodeBlock
     let elseClause: ASTElseClause?
 }
@@ -52,6 +56,11 @@ struct ASTElseIfClause: ASTElseClause {
 }
 
 struct ASTFinalElseClause: ASTElseClause {
+    let codeBlock: ASTCodeBlock
+}
+
+struct ASTWhileStatement: ASTStatement {
+    let condition: ASTConditionClause
     let codeBlock: ASTCodeBlock
 }
 

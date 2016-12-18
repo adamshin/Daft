@@ -28,6 +28,12 @@ extension ASTCodeBlock {
     }
 }
 
+extension ASTConditionClause {
+    var description: String {
+        return "ASTConditionClause { expression: \(expression.description)}"
+    }
+}
+
 extension ASTExpressionStatement {
     var description: String {
         return "ASTExpressionStatement { expression: \(expression.description) }"
@@ -55,6 +61,12 @@ extension ASTElseIfClause {
 extension ASTFinalElseClause {
     var description: String {
         return "ASTElse { codeBlock: \(codeBlock.description) }"
+    }
+}
+
+extension ASTWhileStatement {
+    var description: String {
+        return "ASTWhileStatement { condition: \(condition.description), codeBlock: \(codeBlock.description) }"
     }
 }
 

@@ -17,6 +17,9 @@ extension Parser {
         case .ifKeyword:
             return try parseIfStatement()
             
+        case .whileKeyword:
+            return try parseWhileStatement()
+            
         case .varKeyword:
             let statement = try parseVariableDeclarationStatement()
             try consume(.semicolon)
@@ -53,10 +56,7 @@ extension Parser {
     func parseIfStatement() throws -> ASTIfStatement {
         try consume(.ifKeyword)
         
-        try consume(.leftParen)
-        let condition = try parseExpression()
-        try consume(.rightParen)
-        
+        let condition = try parseConditionClause()
         let codeBlock = try parseCodeBlock()
         
         var elseClause: ASTElseClause?
@@ -80,6 +80,15 @@ extension Parser {
             let codeBlock = try parseCodeBlock()
             return ASTFinalElseClause(codeBlock: codeBlock)
         }
+    }
+    
+    func parseWhileStatement() throws -> ASTWhileStatement {
+        try consume(.whileKeyword)
+        
+        let condition = try parseConditionClause()
+        let codeBlock = try parseCodeBlock()
+        
+        return ASTWhileStatement(condition: condition, codeBlock: codeBlock)
     }
     
 }

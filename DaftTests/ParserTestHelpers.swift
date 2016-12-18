@@ -62,10 +62,14 @@ func program(_ statements: [ASTStatement]) -> ASTProgram {
     return ASTProgram(statements: statements)
 }
 
-// MARK: - Code Block
+// MARK: - Structure
 
 func codeBlock(_ statements: [ASTStatement]) -> ASTCodeBlock {
     return ASTCodeBlock(statements: statements)
+}
+
+func condition(_ expression: ASTExpression) -> ASTConditionClause {
+    return ASTConditionClause(expression: expression)
 }
 
 // MARK: - Statements
@@ -78,11 +82,11 @@ func variableDeclaration(_ name: String, _ expression: ASTExpression?) -> ASTVar
     return ASTVariableDeclarationStatement(name: name, expression: expression)
 }
 
-func ifStatement(_ condition: ASTExpression, _ codeBlock: ASTCodeBlock) -> ASTIfStatement {
+func ifStatement(_ condition: ASTConditionClause, _ codeBlock: ASTCodeBlock) -> ASTIfStatement {
     return ASTIfStatement(condition: condition, codeBlock: codeBlock, elseClause: nil)
 }
 
-func ifStatement(_ condition: ASTExpression, _ codeBlock: ASTCodeBlock, _ elseClause: ASTElseClause) -> ASTIfStatement {
+func ifStatement(_ condition: ASTConditionClause, _ codeBlock: ASTCodeBlock, _ elseClause: ASTElseClause) -> ASTIfStatement {
     return ASTIfStatement(condition: condition, codeBlock: codeBlock, elseClause: elseClause)
 }
 
@@ -92,6 +96,10 @@ func elseIf(_ ifStatement: ASTIfStatement) -> ASTElseIfClause {
 
 func finalElse(_ codeBlock: ASTCodeBlock) -> ASTFinalElseClause {
     return ASTFinalElseClause(codeBlock: codeBlock)
+}
+
+func whileStatement(_ condition: ASTConditionClause, _ codeBlock: ASTCodeBlock) -> ASTWhileStatement {
+    return ASTWhileStatement(condition: condition, codeBlock: codeBlock)
 }
 
 // MARK: - Expressions

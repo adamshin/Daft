@@ -26,12 +26,12 @@ class ParserStatementTests: XCTestCase {
                 expected: variableDeclaration("b", binarySeries(postfix(intLiteral("0"))))
             ),
             ParserTestCase(
-                input: "if (1) { foo; }",
+                input: "if (1) { }",
                 expected: ifStatement(
-                    binarySeries(postfix(intLiteral("1"))),
-                    codeBlock([
-                        expression(binarySeries(postfix(identifier("foo"))))
-                    ])
+                    condition(
+                        binarySeries(postfix(intLiteral("1")))
+                    ),
+                    codeBlock([])
                 )
             )
         ]
@@ -46,16 +46,22 @@ class ParserStatementTests: XCTestCase {
     func testParseIfStatement() {
         let testCases = [
             ParserTestCase(
-                input: "if (1) { }",
+                input: "if (1) { foo; }",
                 expected: ifStatement(
-                    binarySeries(postfix(intLiteral("1"))),
-                    codeBlock([])
+                    condition(
+                        binarySeries(postfix(intLiteral("1")))
+                    ),
+                    codeBlock([
+                        expression(binarySeries(postfix(identifier("foo"))))
+                    ])
                 )
             ),
             ParserTestCase(
                 input: "if (1) { } else { }",
                 expected: ifStatement(
-                    binarySeries(postfix(intLiteral("1"))),
+                    condition(
+                        binarySeries(postfix(intLiteral("1")))
+                    ),
                     codeBlock([]),
                     finalElse(codeBlock([]))
                 )
@@ -63,10 +69,14 @@ class ParserStatementTests: XCTestCase {
             ParserTestCase(
                 input: "if (1) { } else if (2) { } else { }",
                 expected: ifStatement(
-                    binarySeries(postfix(intLiteral("1"))),
+                    condition(
+                        binarySeries(postfix(intLiteral("1")))
+                    ),
                     codeBlock([]),
                     elseIf(ifStatement(
-                        binarySeries(postfix(intLiteral("2"))),
+                        condition(
+                            binarySeries(postfix(intLiteral("2")))
+                        ),
                         codeBlock([]),
                         finalElse(
                             codeBlock([])
@@ -76,13 +86,31 @@ class ParserStatementTests: XCTestCase {
             ),
         ]
         let errorCases = [
-            ParserErrorCase(input: "if 1 { }", error: .unexpectedToken),
+            ParserErrorCase(input: "if 1", error: .unexpectedToken),
             ParserErrorCase(input: "if else", error: .unexpectedToken),
-            ParserErrorCase(input: "if (1)", error: .endOfFile),
-            ParserErrorCase(input: "if (1) { } else", error: .endOfFile),
             ParserErrorCase(input: "if (1) { } else if", error: .endOfFile),
         ]
         testParser(testCases: testCases, errorCases: errorCases) { try $0.parseIfStatement() }
+    }
+    
+    func testParseWhileStatement() {
+        let testCases = [
+            ParserTestCase(
+                input: "while (1) { foo; }",
+                expected: whileStatement(
+                    condition(
+                        binarySeries(postfix(intLiteral("1")))
+                    ),
+                    codeBlock([
+                        expression(binarySeries(postfix(identifier("foo"))))
+                    ])
+                )
+            ),
+        ]
+        let errorCases = [
+            ParserErrorCase(input: "while 1", error: .unexpectedToken)
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseWhileStatement() }
     }
 
 }

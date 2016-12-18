@@ -1,5 +1,5 @@
 //
-//  Parser+CodeBlock.swift
+//  Parser+Structure.swift
 //  Daft
 //
 //  Created by Adam Shin on 12/17/16.
@@ -26,6 +26,14 @@ extension Parser {
         try consume(.rightBrace)
         
         return ASTCodeBlock(statements: statements)
+    }
+    
+    func parseConditionClause() throws -> ASTConditionClause {
+        try consume(.leftParen)
+        let expression = try parseExpression()
+        try consume(.rightParen)
+        
+        return ASTConditionClause(expression: expression)
     }
 
 }

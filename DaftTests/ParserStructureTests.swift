@@ -1,5 +1,5 @@
 //
-//  ParserCodeBlockTests.swift
+//  ParserStructureTests.swift
 //  Daft
 //
 //  Created by Adam Shin on 12/17/16.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import Daft
 
-class ParserCodeBlockTests: XCTestCase {
+class ParserStructureTests: XCTestCase {
     
     func testParseCodeBlock() {
         let testCases = [
@@ -39,5 +39,21 @@ class ParserCodeBlockTests: XCTestCase {
         ]
         testParser(testCases: testCases, errorCases: errorCases) { try $0.parseCodeBlock() }
     }
-    
+
+    func testParseConditionClause() {
+        let testCases = [
+            ParserTestCase(
+                input: "(x)",
+                expected: condition(binarySeries(postfix(identifier("x"))))
+            )
+        ]
+        let errorCases = [
+            ParserErrorCase(input: "x", error: ParserError.unexpectedToken),
+            ParserErrorCase(input: "(x", error: ParserError.endOfFile),
+            ParserErrorCase(input: "(x;", error: ParserError.unexpectedToken),
+            ParserErrorCase(input: "()", error: ParserError.unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseConditionClause() }
+    }
+
 }
