@@ -34,7 +34,7 @@ private let testCases: [(input: [Token], expected: AST)] = [
                             )
                         ],
                         operators: [
-                            .addition
+                            ASTBinaryOperator(type: .addition)
                         ]
                     )
                 )
@@ -61,7 +61,7 @@ private let testCases: [(input: [Token], expected: AST)] = [
                             ASTPostfixExpression(
                                 primaryExpression: ASTIdentifierExpression(name: "bar"),
                                 postfixes: [
-                                    ASTFunctionArgumentList(
+                                    ASTArgumentList(
                                         arguments: [
                                             ASTBinarySeriesExpression(
                                                 expressions: [
@@ -119,7 +119,7 @@ private let testCases: [(input: [Token], expected: AST)] = [
                                             )
                                         ],
                                         operators: [
-                                            .addition,
+                                            ASTBinaryOperator(type: .addition),
                                         ]
                                     )
                                 ),
@@ -131,8 +131,8 @@ private let testCases: [(input: [Token], expected: AST)] = [
                             )
                         ],
                         operators: [
-                            .addition,
-                            .subtraction,
+                            ASTBinaryOperator(type: .addition),
+                            ASTBinaryOperator(type: .subtraction),
                         ]
                     )
                 )

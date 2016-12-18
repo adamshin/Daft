@@ -14,10 +14,6 @@ extension Array where Element: ASTNode {
     }
 }
 
-extension BinaryOperatorType: ASTNode {
-    var description: String { return rawValue }
-}
-
 // MARK: - AST
 
 extension AST {
@@ -44,15 +40,21 @@ extension ASTBinarySeriesExpression {
     }
 }
 
+extension ASTBinaryOperator {
+    var description: String {
+        return type.rawValue
+    }
+}
+
 extension ASTPostfixExpression {
     var description: String {
         return "ASTPostfixExpression { primaryExpression: \(primaryExpression.description), postfixes: \(postfixes.description) }"
     }
 }
 
-extension ASTFunctionArgumentList {
+extension ASTArgumentList {
     var description: String {
-        return "ASTFunctionArgumentList { arguments: [\(arguments.map { $0.description }.joined(separator: ", "))] }"
+        return "ASTArgumentList { arguments: [\(arguments.map { $0.description }.joined(separator: ", "))] }"
     }
 }
 

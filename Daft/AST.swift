@@ -38,7 +38,11 @@ struct ASTVariableDeclarationStatement: ASTStatement {
 
 struct ASTBinarySeriesExpression: ASTExpression {
     let expressions: [ASTPostfixExpression]
-    let operators: [BinaryOperatorType]
+    let operators: [ASTBinaryOperator]
+}
+
+struct ASTBinaryOperator: ASTNode {
+    let type: BinaryOperatorType
 }
 
 struct ASTPostfixExpression: ASTNode {
@@ -46,7 +50,7 @@ struct ASTPostfixExpression: ASTNode {
     let postfixes: [ASTPostfix]
 }
 
-struct ASTFunctionArgumentList: ASTPostfix {
+struct ASTArgumentList: ASTPostfix {
     let arguments: [ASTExpression]
 }
 
