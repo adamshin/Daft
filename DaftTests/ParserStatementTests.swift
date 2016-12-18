@@ -26,7 +26,11 @@ class ParserStatementTests: XCTestCase {
                 expected: variableDeclaration("b", binarySeries(postfix(intLiteral("0"))))
             ),
         ]
-        testParserCases(testCases) { try $0.parseStatement() }
+        let errorCases = [
+            ParserErrorCase(input: "foo", error: .endOfFile),
+            ParserErrorCase(input: "var x y;", error: .unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseStatement() }
     }
 
 }

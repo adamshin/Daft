@@ -40,7 +40,12 @@ class ParserExpressionTests: XCTestCase {
                 ])
             ),
         ]
-        testParserCases(testCases) { try $0.parseBinarySeriesExpression() }
+        let errorCases = [
+            ParserErrorCase(input: "1 +", error: .endOfFile),
+            ParserErrorCase(input: "1 + +", error: .unexpectedToken),
+            ParserErrorCase(input: "+ 2", error: .unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseBinarySeriesExpression() }
     }
     
     // MARK: - Postfix Expressions
@@ -71,7 +76,7 @@ class ParserExpressionTests: XCTestCase {
                 )
             ),
         ]
-        testParserCases(testCases) { try $0.parsePostfixExpression() }
+        testParser(testCases: testCases, errorCases: []) { try $0.parsePostfixExpression() }
     }
     
     func testParseArgumentList() {
@@ -102,7 +107,14 @@ class ParserExpressionTests: XCTestCase {
                 ])
             ),
         ]
-        testParserCases(testCases) { try $0.parseArgumentList() }
+        let errorCases = [
+            ParserErrorCase(input: "a", error: .unexpectedToken),
+            ParserErrorCase(input: ")", error: .unexpectedToken),
+            ParserErrorCase(input: "(", error: .endOfFile),
+            ParserErrorCase(input: "(a,)", error: .unexpectedToken),
+            ParserErrorCase(input: "(, b)", error: .unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseArgumentList() }
     }
     
     // MARK: - Primary Expressions
@@ -121,8 +133,18 @@ class ParserExpressionTests: XCTestCase {
                 input: "bacon",
                 expected: identifier("bacon")
             ),
+            ParserTestCase(
+                input: "(1)",
+                expected: parenthesized(binarySeries(postfix(intLiteral("1"))))
+            ),
         ]
-        testParserCases(testCases) { try $0.parsePrimaryExpression() }
+        let errorCases = [
+            ParserErrorCase(input: "var", error: .unexpectedToken),
+            ParserErrorCase(input: "+", error: .unexpectedToken),
+            ParserErrorCase(input: ";", error: .unexpectedToken),
+            ParserErrorCase(input: "{", error: .unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parsePrimaryExpression() }
     }
     
     func testParseParenthesizedExpression() {
@@ -133,18 +155,14 @@ class ParserExpressionTests: XCTestCase {
                     binarySeries(postfix(identifier("banana")))
                 )
             ),
-            ParserTestCase(
-                input: "((8))",
-                expected: parenthesized(
-                    binarySeries(postfix(
-                        parenthesized(
-                            binarySeries(postfix(intLiteral("8")))
-                        )
-                    ))
-                )
-            ),
         ]
-        testParserCases(testCases) { try $0.parseParenthesizedExpression() }
+        let errorCases = [
+            ParserErrorCase(input: "()", error: .unexpectedToken),
+            ParserErrorCase(input: "a", error: .unexpectedToken),
+            ParserErrorCase(input: "(a", error: .endOfFile),
+            ParserErrorCase(input: "(a;", error: .unexpectedToken),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseParenthesizedExpression() }
     }
 
 }

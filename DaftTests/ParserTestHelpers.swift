@@ -16,7 +16,12 @@ struct ParserTestCase {
     let expected: ASTNode
 }
 
-func testParserCases(_ testCases: [ParserTestCase], test: (Parser) throws -> ASTNode) {
+struct ParserErrorCase {
+    let input: String
+    let error: ParserError
+}
+
+func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test: (Parser) throws -> ASTNode) {
     testCases.forEach {
         let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).lex()
         let parser = Parser(input: ParserArrayInput(tokens: tokens))
@@ -27,6 +32,22 @@ func testParserCases(_ testCases: [ParserTestCase], test: (Parser) throws -> AST
         }
         catch let error {
             XCTFail("Parser threw error on valid input: \(error)")
+        }
+    }
+    
+    errorCases.forEach {
+        let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).lex()
+        let parser = Parser(input: ParserArrayInput(tokens: tokens))
+        
+        do {
+            let _ = try test(parser)
+            XCTFail("Parser failed to throw error.")
+        }
+        catch let error as ParserError {
+            XCTAssertEqual(error, $0.error, "Parser threw incorrect error.")
+        }
+        catch {
+            XCTFail("Parser threw unrecognized error.")
         }
     }
 }

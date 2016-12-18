@@ -62,7 +62,7 @@ class ParserTests: XCTestCase {
                 )
             )
         ]
-        testParserCases(testCases) { try $0.parse() }
+        testParser(testCases: testCases, errorCases: []) { try $0.parse() }
     }
     
 }
