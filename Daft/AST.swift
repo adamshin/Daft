@@ -17,9 +17,15 @@ protocol ASTPostfix: ASTNode { }
 protocol ASTExpression: ASTNode { }
 protocol ASTPrimaryExpression: ASTNode { }
 
-// MARK: - AST
+// MARK: - Program
 
-struct AST: ASTNode {
+struct ASTProgram: ASTNode {
+    let statements: [ASTStatement]
+}
+
+// MARK: - Code Block
+
+struct ASTCodeBlock: ASTNode {
     let statements: [ASTStatement]
 }
 
@@ -32,6 +38,11 @@ struct ASTExpressionStatement: ASTStatement {
 struct ASTVariableDeclarationStatement: ASTStatement {
     let name: String
     let expression: ASTExpression?
+}
+
+struct ASTIfStatement: ASTStatement {
+    let condition: ASTExpression
+    let codeBlock: ASTCodeBlock
 }
 
 // MARK: - Expressions

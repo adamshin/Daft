@@ -27,7 +27,7 @@ private let testCases = [
         expected: [
             .varKeyword,
             .identifier("foo"),
-            .assign,
+            .binaryOperator(.assignment),
             .intLiteral("42"),
             .semicolon,
         ]
@@ -74,14 +74,14 @@ private let testCases = [
         input: "a=b==c < > ===;==",
         expected: [
             .identifier("a"),
-            .assign,
+            .binaryOperator(.assignment),
             .identifier("b"),
             .binaryOperator(.equality),
             .identifier("c"),
             .binaryOperator(.lessThan),
             .binaryOperator(.greaterThan),
             .binaryOperator(.equality),
-            .assign,
+            .binaryOperator(.assignment),
             .semicolon,
             .binaryOperator(.equality),
         ]

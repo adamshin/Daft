@@ -13,17 +13,20 @@ extension Parser {
     func parseStatement() throws -> ASTStatement {
         guard let token = input.nextToken() else { throw ParserError.endOfFile }
         
-        let statement: ASTStatement
-        
         switch token {
+        case .ifKeyword:
+            return try parseIfStatement()
+            
         case .varKeyword:
-            statement = try parseVariableDeclarationStatement()
+            let statement = try parseVariableDeclarationStatement()
+            try consume(.semicolon)
+            return statement
+            
         default:
-            statement = try parseExpressionStatement()
+            let statement = try parseExpressionStatement()
+            try consume(.semicolon)
+            return statement
         }
-        
-        try consume(.semicolon)
-        return statement
     }
     
     func parseExpressionStatement() throws -> ASTExpressionStatement {
@@ -39,12 +42,24 @@ extension Parser {
         input.consumeToken()
         
         var expression: ASTExpression?
-        if let token = input.nextToken(), token == .assign {
+        if let token = input.nextToken(), token == .binaryOperator(.assignment) {
             input.consumeToken()
             expression = try parseExpression()
         }
         
         return ASTVariableDeclarationStatement(name: name, expression: expression)
+    }
+    
+    func parseIfStatement() throws -> ASTIfStatement {
+        try consume(.ifKeyword)
+        
+        try consume(.leftParen)
+        let condition = try parseExpression()
+        try consume(.rightParen)
+        
+        let codeBlock = try parseCodeBlock()
+        
+        return ASTIfStatement(condition: condition, codeBlock: codeBlock)
     }
     
 }

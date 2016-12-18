@@ -16,9 +16,15 @@ extension Array where Element: ASTNode {
 
 // MARK: - AST
 
-extension AST {
+extension ASTProgram {
     var description: String {
         return "AST { statements: [\(statements.map { $0.description }.joined(separator: ", "))]}"
+    }
+}
+
+extension ASTCodeBlock {
+    var description: String {
+        return "ASTCodeBlock { statements: [\(statements.map { $0.description }.joined(separator: ", "))]}"
     }
 }
 
@@ -31,6 +37,12 @@ extension ASTExpressionStatement {
 extension ASTVariableDeclarationStatement {
     var description: String {
         return "ASTVariableDeclarationStatement { name: \(name), expression: \(expression?.description ?? "nil") }"
+    }
+}
+
+extension ASTIfStatement {
+    var description: String {
+        return "ASTIfStatement { condition: \(condition.description), codeBlock: \(codeBlock.description) }"
     }
 }
 

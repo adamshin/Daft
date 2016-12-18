@@ -15,7 +15,7 @@ class ParserTests: XCTestCase {
         let testCases = [
             ParserTestCase(
                 input: "foo + 100;",
-                expected: ast(
+                expected: program(
                     expression(binarySeries([
                         postfix(identifier("foo")),
                         postfix(intLiteral("100")),
@@ -26,7 +26,7 @@ class ParserTests: XCTestCase {
             ),
             ParserTestCase(
                 input: "var foo = bar(5);",
-                expected: ast(
+                expected: program(
                     variableDeclaration(
                         "foo",
                         binarySeries(postfix(
@@ -41,7 +41,7 @@ class ParserTests: XCTestCase {
             ),
             ParserTestCase(
                 input: "1 + (2 + 3) - 4;",
-                expected: ast(
+                expected: program(
                     expression(
                         binarySeries([
                             postfix(intLiteral("1")),

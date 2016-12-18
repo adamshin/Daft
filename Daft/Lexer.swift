@@ -70,8 +70,9 @@ class Lexer {
         }
         
         switch string {
-        case "var": return .varKeyword
+        case "if": return .ifKeyword
         case "func": return .funcKeyword
+        case "var": return .varKeyword
         default: return .identifier(string)
         }
     }
@@ -117,7 +118,7 @@ class Lexer {
                 input.consumeChar()
                 return .binaryOperator(.equality)
             } else {
-                return .assign
+                return .binaryOperator(.assignment)
             }
             
         case "+": return .binaryOperator(.addition)

@@ -9,6 +9,8 @@
 import Foundation
 
 enum BinaryOperatorType: String {
+    case assignment
+    
     case addition
     case subtraction
     

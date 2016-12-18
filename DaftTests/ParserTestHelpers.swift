@@ -52,14 +52,20 @@ func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test
     }
 }
 
-// MARK: - AST
+// MARK: - Program
 
-func ast(_ statement: ASTStatement) -> AST {
-    return AST(statements: [statement])
+func program(_ statement: ASTStatement) -> ASTProgram {
+    return ASTProgram(statements: [statement])
 }
 
-func ast(_ statements: [ASTStatement]) -> AST {
-    return AST(statements: statements)
+func program(_ statements: [ASTStatement]) -> ASTProgram {
+    return ASTProgram(statements: statements)
+}
+
+// MARK: - Code Block
+
+func codeBlock(_ statements: [ASTStatement]) -> ASTCodeBlock {
+    return ASTCodeBlock(statements: statements)
 }
 
 // MARK: - Statements
@@ -70,6 +76,10 @@ func expression(_ expression: ASTExpression) -> ASTExpressionStatement {
 
 func variableDeclaration(_ name: String, _ expression: ASTExpression?) -> ASTVariableDeclarationStatement {
     return ASTVariableDeclarationStatement(name: name, expression: expression)
+}
+
+func ifStatement(_ condition: ASTExpression, _ codeBlock: ASTCodeBlock) -> ASTIfStatement {
+    return ASTIfStatement(condition: condition, codeBlock: codeBlock)
 }
 
 // MARK: - Expressions

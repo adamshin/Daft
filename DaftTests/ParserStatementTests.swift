@@ -11,7 +11,7 @@ import XCTest
 
 class ParserStatementTests: XCTestCase {
     
-    func testParseExpressionStatement() {
+    func testParseStatement() {
         let testCases = [
             ParserTestCase(
                 input: "foo;",
@@ -25,10 +25,20 @@ class ParserStatementTests: XCTestCase {
                 input: "var b = 0;",
                 expected: variableDeclaration("b", binarySeries(postfix(intLiteral("0"))))
             ),
+            ParserTestCase(
+                input: "if (1) { foo; }",
+                expected: ifStatement(
+                    binarySeries(postfix(intLiteral("1"))),
+                    codeBlock([
+                        expression(binarySeries(postfix(identifier("foo"))))
+                    ])
+                )
+            )
         ]
         let errorCases = [
             ParserErrorCase(input: "foo", error: .endOfFile),
             ParserErrorCase(input: "var x y;", error: .unexpectedToken),
+            ParserErrorCase(input: "if 1 { }", error: .unexpectedToken),
         ]
         testParser(testCases: testCases, errorCases: errorCases) { try $0.parseStatement() }
     }
