@@ -24,7 +24,7 @@ class Parser {
     }
     
     func parse() throws -> AST {
-        return try parseStatementList()
+        return try parseAST()
     }
     
     // MARK: - Helpers

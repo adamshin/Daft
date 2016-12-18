@@ -9,157 +9,60 @@
 import XCTest
 @testable import Daft
 
-// MARK: - Test Cases
-
-private let testCases: [(input: [Token], expected: AST)] = [
-    (
-        input: [
-            .identifier("foo"),
-            .binaryOperator(.addition),
-            .intLiteral("42"),
-            .semicolon,
-        ],
-        expected: AST(
-            statements: [
-                ASTExpressionStatement(
-                    expression: ASTBinarySeriesExpression(
-                        expressions: [
-                            ASTPostfixExpression(
-                                primaryExpression: ASTIdentifierExpression(name: "foo"),
-                                postfixes: []
-                            ),
-                            ASTPostfixExpression(
-                                primaryExpression: ASTIntLiteralExpression(literal: "42"),
-                                postfixes: []
-                            )
-                        ],
-                        operators: [
-                            ASTBinaryOperator(type: .addition)
-                        ]
-                    )
-                )
-            ]
-        )
-    ),
-    (
-        input: [
-            .varKeyword,
-            .identifier("foo"),
-            .assign,
-            .identifier("bar"),
-            .leftParen,
-            .intLiteral("5"),
-            .rightParen,
-            .semicolon,
-        ],
-        expected: AST(
-            statements: [
-                ASTVariableDeclarationStatement(
-                    name: "foo",
-                    expression: ASTBinarySeriesExpression(
-                        expressions: [
-                            ASTPostfixExpression(
-                                primaryExpression: ASTIdentifierExpression(name: "bar"),
-                                postfixes: [
-                                    ASTArgumentList(
-                                        arguments: [
-                                            ASTBinarySeriesExpression(
-                                                expressions: [
-                                                    ASTPostfixExpression(
-                                                        primaryExpression: ASTIntLiteralExpression(literal: "5"),
-                                                        postfixes: []
-                                                    )
-                                                ],
-                                                operators: []
-                                            )
-                                        ]
-                                    )
-                                ]
-                            )
-                        ],
-                        operators: []
-                    )
-                )
-            ]
-        )
-    ),
-    (
-        input: [
-            .intLiteral("1"),
-            .binaryOperator(.addition),
-            .leftParen,
-            .intLiteral("2"),
-            .binaryOperator(.addition),
-            .intLiteral("3"),
-            .rightParen,
-            .binaryOperator(.subtraction),
-            .intLiteral("4"),
-            .semicolon,
-        ],
-        expected: AST(
-            statements: [
-                ASTExpressionStatement(
-                    expression: ASTBinarySeriesExpression(
-                        expressions: [
-                            ASTPostfixExpression(
-                                primaryExpression: ASTIntLiteralExpression(literal: "1"),
-                                postfixes: []
-                            ),
-                            ASTPostfixExpression(
-                                primaryExpression: ASTParenthesizedExpression(
-                                    expression: ASTBinarySeriesExpression(
-                                        expressions: [
-                                            ASTPostfixExpression(
-                                                primaryExpression: ASTIntLiteralExpression(literal: "2"),
-                                                postfixes: []
-                                            ),
-                                            ASTPostfixExpression(
-                                                primaryExpression: ASTIntLiteralExpression(literal: "3"),
-                                                postfixes: []
-                                            )
-                                        ],
-                                        operators: [
-                                            ASTBinaryOperator(type: .addition),
-                                        ]
-                                    )
-                                ),
-                                postfixes: []
-                            ),
-                            ASTPostfixExpression(
-                                primaryExpression: ASTIntLiteralExpression(literal: "4"),
-                                postfixes: []
-                            )
-                        ],
-                        operators: [
-                            ASTBinaryOperator(type: .addition),
-                            ASTBinaryOperator(type: .subtraction),
-                        ]
-                    )
-                )
-            ]
-        )
-    ),
-]
-
 class ParserTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
-    
-    func testParser() {
-        testCases.forEach { testCase in
-            let parser = Parser(input: ParserArrayInput(tokens: testCase.input))
-            
-            do {
-                let ast = try parser.parse()
-                XCTAssertEqual(ast.description, testCase.expected.description)
-            }
-            catch let error {
-                XCTFail("Parser threw error on valid input: \(error)")
-            }
-        }
+    func testParseAST() {
+        let testCases = [
+            ParserTestCase(
+                input: "foo + 42;",
+                expected: ast(
+                    expression(binarySeries([
+                        postfix(identifier("foo")),
+                        postfix(intLiteral("42")),
+                    ], [
+                        binaryOperator(.addition)
+                    ]))
+                )
+            ),
+            ParserTestCase(
+                input: "var foo = bar(5);",
+                expected: ast(
+                    variableDeclaration(
+                        "foo",
+                        binarySeries(postfix(
+                            identifier("bar"), [
+                                argumentList([
+                                    binarySeries(postfix(intLiteral("5")))
+                                ])
+                            ]
+                        ))
+                    )
+                )
+            ),
+            ParserTestCase(
+                input: "1 + (2 + 3) - 4;",
+                expected: ast(
+                    expression(
+                        binarySeries([
+                            postfix(intLiteral("1")),
+                            postfix(parenthesized(
+                                binarySeries([
+                                    postfix(intLiteral("2")),
+                                    postfix(intLiteral("3")),
+                                ], [
+                                    binaryOperator(.addition)
+                                ])
+                            )),
+                            postfix(intLiteral("4")),
+                        ], [
+                            binaryOperator(.addition),
+                            binaryOperator(.subtraction),
+                        ])
+                    )
+                )
+            )
+        ]
+        testParserCases(testCases) { try $0.parseAST() }
     }
     
 }

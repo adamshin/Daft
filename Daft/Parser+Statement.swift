@@ -10,7 +10,7 @@ import Foundation
 
 extension Parser {
     
-    func parseStatementList() throws -> AST {
+    func parseAST() throws -> AST {
         var statements = [ASTStatement]()
         
         while input.nextToken() != nil {
