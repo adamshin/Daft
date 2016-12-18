@@ -11,8 +11,18 @@ import XCTest
 
 // MARK: - Test Cases
 
-private let testCases: [(input: String, expected: [Token])] = [
-    (
+struct LexerTestCase {
+    let input: String
+    let expected: [Token]
+}
+
+struct LexerErrorCase {
+    let input: String
+    let error: LexerError
+}
+
+private let testCases = [
+    LexerTestCase(
         input: "var foo = 42;",
         expected: [
             .varKeyword,
@@ -22,7 +32,7 @@ private let testCases: [(input: String, expected: [Token])] = [
             .semicolon,
         ]
     ),
-    (
+    LexerTestCase(
         input: "(123+45) - 6 + 78",
         expected: [
             .leftParen,
@@ -36,7 +46,7 @@ private let testCases: [(input: String, expected: [Token])] = [
             .intLiteral("78"),
         ]
     ),
-    (
+    LexerTestCase(
         input: "func   asdf_jkl(a,b)\n\n {}  ",
         expected: [
             .funcKeyword,
@@ -50,7 +60,7 @@ private let testCases: [(input: String, expected: [Token])] = [
             .rightBrace,
         ]
     ),
-    (
+    LexerTestCase(
         input: "a(\"bc123\") \"hello   world\"",
         expected: [
             .identifier("a"),
@@ -60,7 +70,7 @@ private let testCases: [(input: String, expected: [Token])] = [
             .stringLiteral("hello   world"),
         ]
     ),
-    (
+    LexerTestCase(
         input: "a=b==c < > ===;==",
         expected: [
             .identifier("a"),
@@ -78,9 +88,9 @@ private let testCases: [(input: String, expected: [Token])] = [
     ),
 ]
 
-private let errorCases: [(input: String, error: LexerError)] = [
-    (input: "\"hello world", error: .endOfFile),
-    (input: "~", error: .unexpectedCharacter),
+private let errorCases = [
+    LexerErrorCase(input: "\"hello world", error: .endOfFile),
+    LexerErrorCase(input: "~", error: .unexpectedCharacter),
 ]
 
 // MARK: - LexerTests
@@ -93,9 +103,9 @@ class LexerTests: XCTestCase {
     }
     
     func testLexer() {
-        testCases.forEach { testCase in
-            let lexer = Lexer(input: LexerStringInput(string: testCase.input))
-            testCase.expected.forEach {
+        testCases.forEach {
+            let lexer = Lexer(input: LexerStringInput(string: $0.input))
+            $0.expected.forEach {
                 do {
                     guard let token = try lexer.nextToken() else { return XCTFail("Lexer terminated prematurely.") }
                     XCTAssertEqual($0, token, "Lexer returned incorrect token.")
@@ -109,14 +119,14 @@ class LexerTests: XCTestCase {
     }
     
     func testLexerErrors() {
-        errorCases.forEach { errorCase in
-            let lexer = Lexer(input: LexerStringInput(string: errorCase.input))
+        errorCases.forEach {
+            let lexer = Lexer(input: LexerStringInput(string: $0.input))
             do {
                 while let _ = try lexer.nextToken() { }
                 XCTFail("Lexer failed to throw error.")
             }
             catch let error as LexerError {
-                XCTAssertEqual(error, errorCase.error, "Lexer threw incorrect error.")
+                XCTAssertEqual(error, $0.error, "Lexer threw incorrect error.")
             }
             catch {
                 XCTFail("Lexer threw unrecognized error.")
