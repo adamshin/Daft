@@ -10,15 +10,6 @@ import Foundation
 
 extension Parser {
     
-    func parseAST() throws -> AST {
-        var statements = [ASTStatement]()
-        
-        while input.nextToken() != nil {
-            try statements.append(parseStatement())
-        }
-        return AST(statements: statements)
-    }
-    
     func parseStatement() throws -> ASTStatement {
         guard let token = input.nextToken() else { throw ParserError.endOfFile }
         

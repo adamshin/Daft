@@ -24,10 +24,13 @@ class Parser {
     }
     
     func parse() throws -> AST {
-        return try parseAST()
+        var statements = [ASTStatement]()
+        
+        while input.nextToken() != nil {
+            try statements.append(parseStatement())
+        }
+        return AST(statements: statements)
     }
-    
-    // MARK: - Helpers
     
     func consume(_ token: Token) throws {
         guard let nextToken = input.nextToken() else { throw ParserError.endOfFile }

@@ -11,14 +11,14 @@ import XCTest
 
 class ParserTests: XCTestCase {
     
-    func testParseAST() {
+    func testParse() {
         let testCases = [
             ParserTestCase(
-                input: "foo + 42;",
+                input: "foo + 100;",
                 expected: ast(
                     expression(binarySeries([
                         postfix(identifier("foo")),
-                        postfix(intLiteral("42")),
+                        postfix(intLiteral("100")),
                     ], [
                         binaryOperator(.addition)
                     ]))
@@ -62,7 +62,7 @@ class ParserTests: XCTestCase {
                 )
             )
         ]
-        testParserCases(testCases) { try $0.parseAST() }
+        testParserCases(testCases) { try $0.parse() }
     }
     
 }

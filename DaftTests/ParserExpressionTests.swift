@@ -29,11 +29,11 @@ class ParserExpressionTests: XCTestCase {
                 ])
             ),
             ParserTestCase(
-                input: "foo - bar + baz",
+                input: "4 - 5 + 6",
                 expected: binarySeries([
-                    postfix(identifier("foo")),
-                    postfix(identifier("bar")),
-                    postfix(identifier("baz")),
+                    postfix(intLiteral("4")),
+                    postfix(intLiteral("5")),
+                    postfix(intLiteral("6")),
                 ], [
                     binaryOperator(.subtraction),
                     binaryOperator(.addition),
@@ -61,31 +61,11 @@ class ParserExpressionTests: XCTestCase {
                 )
             ),
             ParserTestCase(
-                input: "c(d)",
+                input: "c()()",
                 expected: postfix(
                     identifier("c"),
                     [
-                        argumentList([binarySeries(postfix(identifier("d")))])
-                    ]
-                )
-            ),
-            ParserTestCase(
-                input: "(e)()",
-                expected: postfix(
-                    parenthesized(binarySeries(postfix(identifier("e")))),
-                    [
-                        argumentList([])
-                    ]
-                )
-            ),
-            ParserTestCase(
-                input: "f(g)()",
-                expected: postfix(
-                    identifier("f"),
-                    [
-                        argumentList([
-                            binarySeries(postfix(identifier("g")))
-                        ]),
+                        argumentList([]),
                         argumentList([]),
                     ]
                 )
