@@ -86,6 +86,24 @@ private let testCases = [
             .binaryOperator(.equality),
         ]
     ),
+    LexerTestCase(
+        input: "if (a) { b; } else { c; }",
+        expected: [
+            .ifKeyword,
+            .leftParen,
+            .identifier("a"),
+            .rightParen,
+            .leftBrace,
+            .identifier("b"),
+            .semicolon,
+            .rightBrace,
+            .elseKeyword,
+            .leftBrace,
+            .identifier("c"),
+            .semicolon,
+            .rightBrace,
+        ]
+    ),
 ]
 
 private let errorCases = [

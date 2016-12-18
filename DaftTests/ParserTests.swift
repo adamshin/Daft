@@ -14,15 +14,26 @@ class ParserTests: XCTestCase {
     func testParse() {
         let testCases = [
             ParserTestCase(
-                input: "foo + 100;",
-                expected: program(
+                input: "100 + b; hi(); asdf = 3;",
+                expected: program([
                     expression(binarySeries([
-                        postfix(identifier("foo")),
                         postfix(intLiteral("100")),
+                        postfix(identifier("b")),
                     ], [
                         binaryOperator(.addition)
-                    ]))
-                )
+                    ])),
+                    expression(binarySeries(postfix(
+                        identifier("hi"), [
+                            argumentList([])
+                        ]
+                    ))),
+                    expression(binarySeries([
+                        postfix(identifier("asdf")),
+                        postfix(intLiteral("3")),
+                    ], [
+                        binaryOperator(.assignment)
+                    ])),
+                ])
             ),
             ParserTestCase(
                 input: "var foo = bar(5);",
@@ -60,7 +71,31 @@ class ParserTests: XCTestCase {
                         ])
                     )
                 )
-            )
+            ),
+            ParserTestCase(
+                input: "if (a) { foo; bar; } else if (b) { baz; } else { spam; } zip;",
+                expected: program([
+                    ifStatement(
+                        binarySeries(postfix(identifier("a"))),
+                        codeBlock([
+                            expression(binarySeries(postfix(identifier("foo")))),
+                            expression(binarySeries(postfix(identifier("bar")))),
+                        ]),
+                        elseIf(ifStatement(
+                            binarySeries(postfix(identifier("b"))),
+                            codeBlock([
+                                expression(binarySeries(postfix(identifier("baz")))),
+                            ]),
+                            finalElse(
+                                codeBlock([
+                                    expression(binarySeries(postfix(identifier("spam"))))
+                                ])
+                            )
+                        ))
+                    ),
+                    expression(binarySeries(postfix(identifier("zip")))),
+                ])
+            ),
         ]
         testParser(testCases: testCases, errorCases: []) { try $0.parse() }
     }

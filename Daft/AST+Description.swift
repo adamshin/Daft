@@ -42,7 +42,19 @@ extension ASTVariableDeclarationStatement {
 
 extension ASTIfStatement {
     var description: String {
-        return "ASTIfStatement { condition: \(condition.description), codeBlock: \(codeBlock.description) }"
+        return "ASTIfStatement { condition: \(condition.description), codeBlock: \(codeBlock.description), elseClause: \(elseClause?.description ?? "nil") }"
+    }
+}
+
+extension ASTElseIfClause {
+    var description: String {
+        return "ASTIfStatement { ifStatement: \(ifStatement.description) }"
+    }
+}
+
+extension ASTFinalElseClause {
+    var description: String {
+        return "ASTElse { codeBlock: \(codeBlock.description) }"
     }
 }
 

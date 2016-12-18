@@ -79,7 +79,19 @@ func variableDeclaration(_ name: String, _ expression: ASTExpression?) -> ASTVar
 }
 
 func ifStatement(_ condition: ASTExpression, _ codeBlock: ASTCodeBlock) -> ASTIfStatement {
-    return ASTIfStatement(condition: condition, codeBlock: codeBlock)
+    return ASTIfStatement(condition: condition, codeBlock: codeBlock, elseClause: nil)
+}
+
+func ifStatement(_ condition: ASTExpression, _ codeBlock: ASTCodeBlock, _ elseClause: ASTElseClause) -> ASTIfStatement {
+    return ASTIfStatement(condition: condition, codeBlock: codeBlock, elseClause: elseClause)
+}
+
+func elseIf(_ ifStatement: ASTIfStatement) -> ASTElseIfClause {
+    return ASTElseIfClause(ifStatement: ifStatement)
+}
+
+func finalElse(_ codeBlock: ASTCodeBlock) -> ASTFinalElseClause {
+    return ASTFinalElseClause(codeBlock: codeBlock)
 }
 
 // MARK: - Expressions

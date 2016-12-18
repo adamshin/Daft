@@ -18,10 +18,16 @@ class ParserCodeBlockTests: XCTestCase {
                 expected: codeBlock([])
             ),
             ParserTestCase(
+                input: "{ foo; }",
+                expected: codeBlock([
+                    expression(binarySeries(postfix(identifier("foo")))),
+                ])
+            ),
+            ParserTestCase(
                 input: "{ foo; bar; }",
                 expected: codeBlock([
                     expression(binarySeries(postfix(identifier("foo")))),
-                    expression(binarySeries(postfix(identifier("bar"))))
+                    expression(binarySeries(postfix(identifier("bar")))),
                 ])
             ),
         ]

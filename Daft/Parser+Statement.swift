@@ -59,7 +59,27 @@ extension Parser {
         
         let codeBlock = try parseCodeBlock()
         
-        return ASTIfStatement(condition: condition, codeBlock: codeBlock)
+        var elseClause: ASTElseClause?
+        if let token = input.nextToken(), token == .elseKeyword {
+            elseClause = try parseElseClause()
+        }
+        
+        return ASTIfStatement(condition: condition, codeBlock: codeBlock, elseClause: elseClause)
+    }
+    
+    func parseElseClause() throws -> ASTElseClause {
+        try consume(.elseKeyword)
+        
+        guard let token = input.nextToken() else { throw ParserError.endOfFile }
+        
+        if token == .ifKeyword {
+            let ifStatement = try parseIfStatement()
+            return ASTElseIfClause(ifStatement: ifStatement)
+        }
+        else {
+            let codeBlock = try parseCodeBlock()
+            return ASTFinalElseClause(codeBlock: codeBlock)
+        }
     }
     
 }

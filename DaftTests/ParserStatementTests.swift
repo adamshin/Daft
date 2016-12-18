@@ -42,5 +42,47 @@ class ParserStatementTests: XCTestCase {
         ]
         testParser(testCases: testCases, errorCases: errorCases) { try $0.parseStatement() }
     }
+    
+    func testParseIfStatement() {
+        let testCases = [
+            ParserTestCase(
+                input: "if (1) { }",
+                expected: ifStatement(
+                    binarySeries(postfix(intLiteral("1"))),
+                    codeBlock([])
+                )
+            ),
+            ParserTestCase(
+                input: "if (1) { } else { }",
+                expected: ifStatement(
+                    binarySeries(postfix(intLiteral("1"))),
+                    codeBlock([]),
+                    finalElse(codeBlock([]))
+                )
+            ),
+            ParserTestCase(
+                input: "if (1) { } else if (2) { } else { }",
+                expected: ifStatement(
+                    binarySeries(postfix(intLiteral("1"))),
+                    codeBlock([]),
+                    elseIf(ifStatement(
+                        binarySeries(postfix(intLiteral("2"))),
+                        codeBlock([]),
+                        finalElse(
+                            codeBlock([])
+                        )
+                    ))
+                )
+            ),
+        ]
+        let errorCases = [
+            ParserErrorCase(input: "if 1 { }", error: .unexpectedToken),
+            ParserErrorCase(input: "if else", error: .unexpectedToken),
+            ParserErrorCase(input: "if (1)", error: .endOfFile),
+            ParserErrorCase(input: "if (1) { } else", error: .endOfFile),
+            ParserErrorCase(input: "if (1) { } else if", error: .endOfFile),
+        ]
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseIfStatement() }
+    }
 
 }

@@ -71,8 +71,11 @@ class Lexer {
         
         switch string {
         case "if": return .ifKeyword
+        case "else": return .elseKeyword
+        
         case "func": return .funcKeyword
         case "var": return .varKeyword
+        
         default: return .identifier(string)
         }
     }

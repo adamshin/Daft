@@ -13,6 +13,7 @@ protocol ASTNode {
 }
 
 protocol ASTStatement: ASTNode { }
+protocol ASTElseClause: ASTNode { }
 protocol ASTPostfix: ASTNode { }
 protocol ASTExpression: ASTNode { }
 protocol ASTPrimaryExpression: ASTNode { }
@@ -42,6 +43,15 @@ struct ASTVariableDeclarationStatement: ASTStatement {
 
 struct ASTIfStatement: ASTStatement {
     let condition: ASTExpression
+    let codeBlock: ASTCodeBlock
+    let elseClause: ASTElseClause?
+}
+
+struct ASTElseIfClause: ASTElseClause {
+    let ifStatement: ASTIfStatement
+}
+
+struct ASTFinalElseClause: ASTElseClause {
     let codeBlock: ASTCodeBlock
 }
 
