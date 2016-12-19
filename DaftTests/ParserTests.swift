@@ -15,7 +15,7 @@ class ParserTests: XCTestCase {
         let testCases = [
             ParserTestCase(
                 input: "100 + b; hi(); asdf = 3;",
-                expected: program([
+                expected: [
                     expression(binarySeries([
                         postfix(intLiteral("100")),
                         postfix(identifier("b")),
@@ -33,11 +33,11 @@ class ParserTests: XCTestCase {
                     ], [
                         binaryOperator(.assignment)
                     ])),
-                ])
+                ]
             ),
             ParserTestCase(
                 input: "var foo = bar(5);",
-                expected: program(
+                expected: [
                     variableDeclaration(
                         "foo",
                         binarySeries(postfix(
@@ -48,11 +48,11 @@ class ParserTests: XCTestCase {
                             ]
                         ))
                     )
-                )
+                ]
             ),
             ParserTestCase(
                 input: "1 + (2 + 3) - 4;",
-                expected: program(
+                expected: [
                     expression(
                         binarySeries([
                             postfix(intLiteral("1")),
@@ -70,11 +70,11 @@ class ParserTests: XCTestCase {
                             binaryOperator(.subtraction),
                         ])
                     )
-                )
+                ]
             ),
             ParserTestCase(
                 input: "if (a) { foo; bar; } else if (b) { baz; } else { spam; } zip;",
-                expected: program([
+                expected: [
                     ifStatement(
                         condition(
                             binarySeries(postfix(identifier("a")))
@@ -98,10 +98,10 @@ class ParserTests: XCTestCase {
                         ))
                     ),
                     expression(binarySeries(postfix(identifier("zip")))),
-                ])
+                ]
             ),
         ]
-        testParser(testCases: testCases, errorCases: []) { try $0.parse() }
+        testParser(testCases: testCases, errorCases: []) { try $0.allStatements() }
     }
     
 }

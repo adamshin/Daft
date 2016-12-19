@@ -39,7 +39,7 @@ class ParserArrayInput: ParserInput {
     
 }
 
-class ParserLiveInput: ParserInput {
+class ParserLexerInput: ParserInput {
     
     let lexer: Lexer
     var storedToken: Token?

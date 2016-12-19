@@ -17,12 +17,12 @@ func repl() {
     }
     let lexer = Lexer(input: lexerInput)
     
-    let parserInput = ParserLiveInput(lexer: lexer)
+    let parserInput = ParserLexerInput(lexer: lexer)
     let parser = Parser(input: parserInput)
     
     do {
-        let ast = try parser.parse()
-        print(String(describing: ast))
+        let statements = try parser.allStatements()
+        print(String(describing: statements))
     }
     catch let error {
         NSLog("Error parsing input: \(error)")

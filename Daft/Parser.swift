@@ -23,13 +23,18 @@ class Parser {
         self.input = input
     }
     
-    func parse() throws -> ASTProgram {
+    func allStatements() throws -> [ASTStatement] {
         var statements = [ASTStatement]()
-        
-        while input.nextToken() != nil {
-            try statements.append(parseStatement())
+        while let statement = try nextStatement() {
+            statements.append(statement)
         }
-        return ASTProgram(statements: statements)
+        return statements
+    }
+    
+    func nextStatement() throws -> ASTStatement? {
+        guard input.nextToken() != nil else { return nil }
+        
+        return try parseStatement()
     }
     
     func consume(_ token: Token) throws {

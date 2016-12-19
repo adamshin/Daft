@@ -15,6 +15,10 @@
 		6650F1151E0647490066C225 /* Parser+Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1141E0647490066C225 /* Parser+Structure.swift */; };
 		6650F1181E064CB30066C225 /* ParserStructureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1171E064CB30066C225 /* ParserStructureTests.swift */; };
 		6650F1191E065B1A0066C225 /* Parser+Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1141E0647490066C225 /* Parser+Structure.swift */; };
+		668166001E078C0700E97AF9 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668165FF1E078C0700E97AF9 /* Evaluator.swift */; };
+		668166021E078C2C00E97AF9 /* EvaluatorInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668166011E078C2C00E97AF9 /* EvaluatorInput.swift */; };
+		668166041E078D6700E97AF9 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668166031E078D6700E97AF9 /* Value.swift */; };
+		668166061E078FF500E97AF9 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668166051E078FF500E97AF9 /* Stack.swift */; };
 		66B615AB1DFD071B00FA2649 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AA1DFD071B00FA2649 /* Parser.swift */; };
 		66B615AE1DFD0B0E00FA2649 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AD1DFD0B0E00FA2649 /* AST.swift */; };
 		66B615B01DFD0B4F00FA2649 /* ParserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AF1DFD0B4F00FA2649 /* ParserInput.swift */; };
@@ -55,6 +59,10 @@
 		6650F1121E062A520066C225 /* ParserStatementTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserStatementTests.swift; sourceTree = "<group>"; };
 		6650F1141E0647490066C225 /* Parser+Structure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Parser+Structure.swift"; sourceTree = "<group>"; };
 		6650F1171E064CB30066C225 /* ParserStructureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserStructureTests.swift; sourceTree = "<group>"; };
+		668165FF1E078C0700E97AF9 /* Evaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Evaluator.swift; sourceTree = "<group>"; };
+		668166011E078C2C00E97AF9 /* EvaluatorInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvaluatorInput.swift; sourceTree = "<group>"; };
+		668166031E078D6700E97AF9 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
+		668166051E078FF500E97AF9 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		66B615AA1DFD071B00FA2649 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		66B615AD1DFD0B0E00FA2649 /* AST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		66B615AF1DFD0B4F00FA2649 /* ParserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserInput.swift; sourceTree = "<group>"; };
@@ -109,6 +117,17 @@
 			name = Parser;
 			sourceTree = "<group>";
 		};
+		668165FE1E078BF300E97AF9 /* Evaluator */ = {
+			isa = PBXGroup;
+			children = (
+				668165FF1E078C0700E97AF9 /* Evaluator.swift */,
+				668166011E078C2C00E97AF9 /* EvaluatorInput.swift */,
+				668166051E078FF500E97AF9 /* Stack.swift */,
+				668166031E078D6700E97AF9 /* Value.swift */,
+			);
+			name = Evaluator;
+			sourceTree = "<group>";
+		};
 		66B615AC1DFD071F00FA2649 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +174,7 @@
 				66B615B41DFD0E6300FA2649 /* Common */,
 				66DB70EB1DF9008E00FF3A5B /* Lexer */,
 				66B615AC1DFD071F00FA2649 /* Parser */,
+				668165FE1E078BF300E97AF9 /* Evaluator */,
 				66DB70E41DF8FD2E00FF3A5B /* main.swift */,
 			);
 			path = Daft;
@@ -276,8 +296,12 @@
 				66B615B21DFD0CFB00FA2649 /* Parser+Expression.swift in Sources */,
 				66DB70ED1DF900A000FF3A5B /* Lexer.swift in Sources */,
 				66B615B01DFD0B4F00FA2649 /* ParserInput.swift in Sources */,
+				668166021E078C2C00E97AF9 /* EvaluatorInput.swift in Sources */,
+				668166001E078C0700E97AF9 /* Evaluator.swift in Sources */,
 				66B615AB1DFD071B00FA2649 /* Parser.swift in Sources */,
 				66DB70E51DF8FD2E00FF3A5B /* main.swift in Sources */,
+				668166061E078FF500E97AF9 /* Stack.swift in Sources */,
+				668166041E078D6700E97AF9 /* Value.swift in Sources */,
 				6650F1081E0605390066C225 /* Parser+Statement.swift in Sources */,
 				66DB70F11DF902A700FF3A5B /* Token.swift in Sources */,
 				66B615B61DFD0E8300FA2649 /* BinaryOperator.swift in Sources */,

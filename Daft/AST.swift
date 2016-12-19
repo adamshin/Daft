@@ -14,12 +14,6 @@ protocol ASTPostfix { }
 protocol ASTExpression { }
 protocol ASTPrimaryExpression { }
 
-// MARK: - Program
-
-struct ASTProgram {
-    let statements: [ASTStatement]
-}
-
 // MARK: - Structure
 
 struct ASTCodeBlock {

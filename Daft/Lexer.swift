@@ -23,7 +23,7 @@ class Lexer {
         self.input = input
     }
     
-    func lex() throws -> [Token] {
+    func allTokens() throws -> [Token] {
         var tokens = [Token]()
         while let token = try nextToken() {
             tokens.append(token)

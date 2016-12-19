@@ -23,7 +23,7 @@ struct ParserErrorCase {
 
 func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test: (Parser) throws -> Any) {
     testCases.forEach {
-        let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).lex()
+        let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).allTokens()
         let parser = Parser(input: ParserArrayInput(tokens: tokens))
         
         do {
@@ -40,7 +40,7 @@ func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test
     }
     
     errorCases.forEach {
-        let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).lex()
+        let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).allTokens()
         let parser = Parser(input: ParserArrayInput(tokens: tokens))
         
         do {
@@ -54,16 +54,6 @@ func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test
             XCTFail("Parser threw unrecognized error.")
         }
     }
-}
-
-// MARK: - Program
-
-func program(_ statement: ASTStatement) -> ASTProgram {
-    return ASTProgram(statements: [statement])
-}
-
-func program(_ statements: [ASTStatement]) -> ASTProgram {
-    return ASTProgram(statements: statements)
 }
 
 // MARK: - Structure
