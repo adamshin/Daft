@@ -13,7 +13,7 @@ import XCTest
 
 struct ParserTestCase {
     let input: String
-    let expected: ASTNode
+    let expected: Any
 }
 
 struct ParserErrorCase {
@@ -21,14 +21,18 @@ struct ParserErrorCase {
     let error: ParserError
 }
 
-func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test: (Parser) throws -> ASTNode) {
+func testParser(testCases: [ParserTestCase], errorCases: [ParserErrorCase], test: (Parser) throws -> Any) {
     testCases.forEach {
         let tokens = try! Lexer(input: LexerStringInput(string: $0.input)).lex()
         let parser = Parser(input: ParserArrayInput(tokens: tokens))
         
         do {
             let result = try test(parser)
-            XCTAssertEqual(result.description, $0.expected.description)
+            
+            let expected = String(describing: $0.expected)
+            let actual = String(describing: result)
+            
+            XCTAssertEqual(actual, expected)
         }
         catch let error {
             XCTFail("Parser threw error on valid input: \(error)")

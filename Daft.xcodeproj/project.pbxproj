@@ -15,7 +15,6 @@
 		6650F1151E0647490066C225 /* Parser+Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1141E0647490066C225 /* Parser+Structure.swift */; };
 		6650F1181E064CB30066C225 /* ParserStructureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1171E064CB30066C225 /* ParserStructureTests.swift */; };
 		6650F1191E065B1A0066C225 /* Parser+Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650F1141E0647490066C225 /* Parser+Structure.swift */; };
-		66B259531E04E3CF008D8AC1 /* AST+Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615C11DFE1BE800FA2649 /* AST+Description.swift */; };
 		66B615AB1DFD071B00FA2649 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AA1DFD071B00FA2649 /* Parser.swift */; };
 		66B615AE1DFD0B0E00FA2649 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AD1DFD0B0E00FA2649 /* AST.swift */; };
 		66B615B01DFD0B4F00FA2649 /* ParserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AF1DFD0B4F00FA2649 /* ParserInput.swift */; };
@@ -27,7 +26,6 @@
 		66B615BE1DFDDD4100FA2649 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AA1DFD071B00FA2649 /* Parser.swift */; };
 		66B615BF1DFDDD4100FA2649 /* Parser+Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615B11DFD0CFB00FA2649 /* Parser+Expression.swift */; };
 		66B615C01DFDDD4100FA2649 /* ParserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615AF1DFD0B4F00FA2649 /* ParserInput.swift */; };
-		66B615C21DFE1BE800FA2649 /* AST+Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B615C11DFE1BE800FA2649 /* AST+Description.swift */; };
 		66DB70E51DF8FD2E00FF3A5B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70E41DF8FD2E00FF3A5B /* main.swift */; };
 		66DB70ED1DF900A000FF3A5B /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EC1DF900A000FF3A5B /* Lexer.swift */; };
 		66DB70EF1DF900D200FF3A5B /* LexerInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EE1DF900D200FF3A5B /* LexerInput.swift */; };
@@ -63,7 +61,6 @@
 		66B615B11DFD0CFB00FA2649 /* Parser+Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Parser+Expression.swift"; sourceTree = "<group>"; };
 		66B615B51DFD0E8300FA2649 /* BinaryOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryOperator.swift; sourceTree = "<group>"; };
 		66B615B71DFD351700FA2649 /* ParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
-		66B615C11DFE1BE800FA2649 /* AST+Description.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AST+Description.swift"; sourceTree = "<group>"; };
 		66DB70E11DF8FD2E00FF3A5B /* Daft */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Daft; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DB70E41DF8FD2E00FF3A5B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		66DB70EC1DF900A000FF3A5B /* Lexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
@@ -129,7 +126,6 @@
 			children = (
 				66DB70F01DF902A700FF3A5B /* Token.swift */,
 				66B615AD1DFD0B0E00FA2649 /* AST.swift */,
-				66B615C11DFE1BE800FA2649 /* AST+Description.swift */,
 				66B615B51DFD0E8300FA2649 /* BinaryOperator.swift */,
 			);
 			name = Common;
@@ -283,7 +279,6 @@
 				66B615AB1DFD071B00FA2649 /* Parser.swift in Sources */,
 				66DB70E51DF8FD2E00FF3A5B /* main.swift in Sources */,
 				6650F1081E0605390066C225 /* Parser+Statement.swift in Sources */,
-				66B615C21DFE1BE800FA2649 /* AST+Description.swift in Sources */,
 				66DB70F11DF902A700FF3A5B /* Token.swift in Sources */,
 				66B615B61DFD0E8300FA2649 /* BinaryOperator.swift in Sources */,
 				6650F1151E0647490066C225 /* Parser+Structure.swift in Sources */,
@@ -308,7 +303,6 @@
 				66B615BE1DFDDD4100FA2649 /* Parser.swift in Sources */,
 				66DB70F91DF9062800FF3A5B /* LexerTests.swift in Sources */,
 				6650F1131E062A520066C225 /* ParserStatementTests.swift in Sources */,
-				66B259531E04E3CF008D8AC1 /* AST+Description.swift in Sources */,
 				6650F1091E0605F60066C225 /* Parser+Statement.swift in Sources */,
 				66DB71001DF90B6E00FF3A5B /* Token.swift in Sources */,
 			);

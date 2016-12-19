@@ -38,3 +38,38 @@ class LexerStringInput: LexerInput {
     }
     
 }
+
+class LexerLiveInput: LexerInput {
+    
+    let fetchInput: () -> String
+    var buffer = ""
+    var finished = false
+    
+    init(fetchInput: @escaping () -> String) {
+        self.fetchInput = fetchInput
+    }
+    
+    func nextChar() -> Character? {
+        if finished { return nil }
+        
+        if buffer.isEmpty {
+            let input = fetchInput()
+            
+            if input.isEmpty {
+                finished = true
+                return nil
+            } else {
+                buffer.append(input + "\n")
+            }
+        }
+        
+        return buffer[buffer.startIndex]
+    }
+    
+    func consumeChar() {
+        if !buffer.isEmpty {
+            buffer.remove(at: buffer.startIndex)
+        }
+    }
+    
+}

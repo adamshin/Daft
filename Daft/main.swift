@@ -11,29 +11,21 @@ import Foundation
 func repl() {
     print("Daft")
     
-    while true {
-        print("> ", terminator: "")
-        
-        do {
-            let input = readLine() ?? ""
-            
-            let lexer = Lexer(input: LexerStringInput(string: input))
-            let tokens = try lexer.lex()
-            
-            let parser = Parser(input: ParserArrayInput(tokens: tokens))
-            let ast = try parser.parse()
-            
-            print(ast.description)
-        }
-        catch let error as LexerError {
-            print("Error lexing input: \(error)")
-        }
-        catch let error as ParserError {
-            print("Error parsing input: \(error)")
-        }
-        catch {
-            print("Unexpected error.")
-        }
+    let lexerInput = LexerLiveInput() {
+        print("  > ", terminator: "")
+        return readLine() ?? ""
+    }
+    let lexer = Lexer(input: lexerInput)
+    
+    let parserInput = ParserLiveInput(lexer: lexer)
+    let parser = Parser(input: parserInput)
+    
+    do {
+        let ast = try parser.parse()
+        print(String(describing: ast))
+    }
+    catch let error {
+        NSLog("Error parsing input: \(error)")
     }
 }
 

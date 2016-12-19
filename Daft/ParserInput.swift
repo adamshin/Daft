@@ -38,3 +38,31 @@ class ParserArrayInput: ParserInput {
     }
     
 }
+
+class ParserLiveInput: ParserInput {
+    
+    let lexer: Lexer
+    var storedToken: Token?
+    
+    init(lexer: Lexer) {
+        self.lexer = lexer
+        storedToken = nil
+    }
+    
+    func nextToken() -> Token? {
+        if storedToken == nil {
+            do {
+                storedToken = try lexer.nextToken()
+            }
+            catch let error {
+                NSLog("Error lexing input: \(error)")
+            }
+        }
+        return storedToken
+    }
+    
+    func consumeToken() {
+        storedToken = nil
+    }
+    
+}
