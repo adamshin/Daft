@@ -13,7 +13,7 @@ enum Token {
     case intLiteral(String)
     case stringLiteral(String)
     
-    case binaryOperator(BinaryOperatorType)
+    case binaryOperator(BinaryOperator)
     
     case ifKeyword
     case elseKeyword

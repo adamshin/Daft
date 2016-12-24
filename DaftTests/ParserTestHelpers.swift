@@ -106,7 +106,7 @@ func binarySeries(_ expressions: [ASTPostfixExpression], _ operators: [ASTBinary
     return ASTBinarySeriesExpression(expressions: expressions, operators: operators)
 }
 
-func binaryOperator(_ type: BinaryOperatorType) -> ASTBinaryOperator {
+func binaryOperator(_ type: BinaryOperator) -> ASTBinaryOperator {
     return ASTBinaryOperator(type: type)
 }
 

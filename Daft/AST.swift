@@ -62,7 +62,7 @@ struct ASTBinarySeriesExpression: ASTExpression {
 }
 
 struct ASTBinaryOperator {
-    let type: BinaryOperatorType
+    let type: BinaryOperator
 }
 
 struct ASTPostfixExpression {

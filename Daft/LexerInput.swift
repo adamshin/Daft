@@ -9,10 +9,8 @@
 import Foundation
 
 protocol LexerInput {
-    
     func nextChar() -> Character?
     func consumeChar()
-    
 }
 
 class LexerStringInput: LexerInput {
@@ -27,13 +25,11 @@ class LexerStringInput: LexerInput {
     
     func nextChar() -> Character? {
         guard location < string.endIndex else { return nil }
-        
         return string[location]
     }
     
     func consumeChar() {
         guard location < string.endIndex else { return }
-        
         location = string.index(location, offsetBy: 1)
     }
     

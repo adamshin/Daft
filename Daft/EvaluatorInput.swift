@@ -9,8 +9,23 @@
 import Foundation
 
 protocol EvaluatorInput {
-    
     func nextStatement() -> ASTStatement?
+}
+
+class EvaluatorArrayInput: EvaluatorInput {
+    
+    var statements: [ASTStatement]
+    var location: Int
+    
+    init(statements: [ASTStatement]) {
+        self.statements = statements
+        location = 0
+    }
+    
+    func nextStatement() -> ASTStatement? {
+        guard !statements.isEmpty else { return nil }
+        return statements.removeFirst()
+    }
     
 }
 

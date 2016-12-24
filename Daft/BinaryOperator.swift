@@ -8,11 +8,13 @@
 
 import Foundation
 
-enum BinaryOperatorType: String {
+enum BinaryOperator: String {
     case assignment
     
     case addition
     case subtraction
+    case multiplication
+    case division
     
     case lessThan
     case greaterThan

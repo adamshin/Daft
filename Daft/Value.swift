@@ -9,7 +9,9 @@
 import Foundation
 
 enum ObjectValue {
+    case void
     case int(Int)
+    case bool(Bool)
     case string(String)
 }
 
@@ -30,7 +32,6 @@ struct LValue: ValueType {
 
 struct RValue: ValueType {
     
-    let rawValue: ObjectValue
-    var value: ObjectValue { return rawValue }
+    let value: ObjectValue
     
 }

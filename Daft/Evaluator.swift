@@ -9,11 +9,18 @@
 import Foundation
 
 enum EvaluatorError: Error {
-    case unrecognizedPrimaryExpression
-    case invalidBinarySeriesExpression
-    
     case unrecognizedIdentifier
     case invalidIntLiteral
+    
+    case invalidBinaryOperatorParameters
+    case invalidAssignment
+    
+    case unrecognizedExpression
+    case unrecognizedPrimaryExpression
+    
+    case invalidBinarySeriesExpression
+    
+    case internalError
 }
 
 class Evaluator {
@@ -30,24 +37,23 @@ class Evaluator {
     
     // MARK: - Expression
     
-    func evaluateExpression(_ expression: ASTExpression, stack: Stack) throws -> RValue {
-        // Do something
-        return RValue(rawValue: .int(0))
-    }
-    
-    func evaluateBinarySeriesExpression(_ expression: ASTBinarySeriesExpression, stack: Stack) throws -> RValue {
-        guard !expression.expressions.isEmpty, expression.operators.count == expression.expressions.count - 1 else {
-            throw EvaluatorError.invalidBinarySeriesExpression
+    class func evaluateExpression(_ expression: ASTExpression, stack: Stack) throws -> RValue {
+        let result: ValueType
+        
+        switch expression {
+        case let binarySeries as ASTBinarySeriesExpression:
+            result = try evaluateBinarySeriesExpression(binarySeries, stack: stack)
+            
+        default:
+            throw EvaluatorError.unrecognizedExpression
         }
         
-        // Loop, combining expressions based on precedence
-        
-        return RValue(rawValue: .int(0))
+        return RValue(value: result.value)
     }
     
     // MARK: - Postfix Expression
     
-    func evaluatePostfixExpression(_ expression: ASTPostfixExpression, stack: Stack) throws -> ValueType {
+    class func evaluatePostfixExpression(_ expression: ASTPostfixExpression, stack: Stack) throws -> ValueType {
         let primaryValue = try evaluatePrimaryExpression(expression.primaryExpression, stack: stack)
         
         // TODO: evaluate postfixes if present and apply them
@@ -57,7 +63,7 @@ class Evaluator {
     
     // MARK: - Primary Expression
     
-    func evaluatePrimaryExpression(_ expression: ASTPrimaryExpression, stack: Stack) throws -> ValueType {
+    class func evaluatePrimaryExpression(_ expression: ASTPrimaryExpression, stack: Stack) throws -> ValueType {
         switch expression {
         case let id as ASTIdentifierExpression:
             return try evaluateIdentifierExpression(id, stack: stack)
@@ -73,26 +79,26 @@ class Evaluator {
         }
     }
     
-    func evaluateParenthesizedExpression(_ expression: ASTParenthesizedExpression, stack: Stack) throws -> RValue {
+    class func evaluateParenthesizedExpression(_ expression: ASTParenthesizedExpression, stack: Stack) throws -> RValue {
         return try evaluateExpression(expression.expression, stack: stack)
     }
 
-    func evaluateIdentifierExpression(_ expression: ASTIdentifierExpression, stack: Stack) throws -> LValue {
+    class func evaluateIdentifierExpression(_ expression: ASTIdentifierExpression, stack: Stack) throws -> LValue {
         guard let variable = stack.localVariable(named: expression.name) else {
             throw EvaluatorError.unrecognizedIdentifier
         }
         return LValue(variable: variable)
     }
     
-    func evaluateIntLiteralExpression(_ expression: ASTIntLiteralExpression) throws -> RValue {
+    class func evaluateIntLiteralExpression(_ expression: ASTIntLiteralExpression) throws -> RValue {
         guard let value = Int(expression.literal) else {
             throw EvaluatorError.invalidIntLiteral
         }
-        return RValue(rawValue: .int(value))
+        return RValue(value: .int(value))
     }
     
-    func evaluateStringLiteralExpression(_ expression: ASTStringLiteralExpression) -> RValue {
-        return RValue(rawValue: .string(expression.literal))
+    class func evaluateStringLiteralExpression(_ expression: ASTStringLiteralExpression) -> RValue {
+        return RValue(value: .string(expression.literal))
     }
     
 }

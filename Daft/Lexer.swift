@@ -127,6 +127,9 @@ class Lexer {
             
         case "+": return .binaryOperator(.addition)
         case "-": return .binaryOperator(.subtraction)
+        case "*": return .binaryOperator(.multiplication)
+        case "/": return .binaryOperator(.division)
+            
         case "<": return .binaryOperator(.lessThan)
         case ">": return .binaryOperator(.greaterThan)
             
@@ -160,7 +163,7 @@ private func isStringDelimiter(_ char: Character) -> Bool {
 
 private func isOperatorCharacter(_ char: Character) -> Bool {
     switch char {
-    case "+", "-", "<", ">", "=": return true
+    case "+", "-", "*", "/", "<", ">", "=": return true
     default: return false
     }
 }

@@ -9,10 +9,8 @@
 import Foundation
 
 protocol ParserInput {
-    
     func nextToken() -> Token?
     func consumeToken()
-    
 }
 
 class ParserArrayInput: ParserInput {
@@ -27,13 +25,11 @@ class ParserArrayInput: ParserInput {
     
     func nextToken() -> Token? {
         guard location < tokens.count else { return nil }
-        
         return tokens[location]
     }
     
     func consumeToken() {
         guard location < tokens.count else { return }
-        
         location += 1
     }
     
