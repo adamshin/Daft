@@ -10,8 +10,8 @@ import Foundation
 
 extension Evaluator {
     
-    class func evaluateBinarySeriesExpression(_ expression: ASTBinarySeriesExpression, stack: Stack) throws -> RValue {
-        let values = try expression.expressions.map { try evaluatePostfixExpression($0, stack: stack) }
+    class func evaluateBinarySeriesExpression(_ expression: ASTBinarySeriesExpression, environment: Environment) throws -> RValue {
+        let values = try expression.expressions.map { try evaluatePostfixExpression($0, environment: environment) }
         let operators = expression.operators.map { $0.type }
         
         let items = try interleave(values: values, operators: operators)

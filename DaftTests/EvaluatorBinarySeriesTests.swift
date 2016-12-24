@@ -80,7 +80,7 @@ class EvaluatorBinarySeriesTests: XCTestCase {
         ]
         testCases.forEach {
             do {
-                let result = try Evaluator.evaluateBinarySeriesExpression($0.input, stack: Stack())
+                let result = try Evaluator.evaluateBinarySeriesExpression($0.input, environment: Environment())
                 
                 let expected = String(describing: $0.expected)
                 let actual = String(describing: result)

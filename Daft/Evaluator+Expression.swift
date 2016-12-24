@@ -12,24 +12,24 @@ extension Evaluator {
     
     // MARK: - Expression
     
-    class func evaluateExpression(_ expression: ASTExpression, stack: Stack) throws -> RValue {
+    class func evaluateExpression(_ expression: ASTExpression, environment: Environment) throws -> ObjectValue {
         let result: ValueType
         
         switch expression {
         case let binarySeries as ASTBinarySeriesExpression:
-            result = try evaluateBinarySeriesExpression(binarySeries, stack: stack)
+            result = try evaluateBinarySeriesExpression(binarySeries, environment: environment)
             
         default:
             throw EvaluatorError.unrecognizedExpression
         }
         
-        return RValue(value: result.value)
+        return result.value
     }
     
     // MARK: - Postfix Expression
     
-    class func evaluatePostfixExpression(_ expression: ASTPostfixExpression, stack: Stack) throws -> ValueType {
-        let primaryValue = try evaluatePrimaryExpression(expression.primaryExpression, stack: stack)
+    class func evaluatePostfixExpression(_ expression: ASTPostfixExpression, environment: Environment) throws -> ValueType {
+        let primaryValue = try evaluatePrimaryExpression(expression.primaryExpression, environment: environment)
         
         // TODO: evaluate postfixes if present and apply them
         
@@ -38,13 +38,13 @@ extension Evaluator {
     
     // MARK: - Primary Expression
     
-    class func evaluatePrimaryExpression(_ expression: ASTPrimaryExpression, stack: Stack) throws -> ValueType {
+    class func evaluatePrimaryExpression(_ expression: ASTPrimaryExpression, environment: Environment) throws -> ValueType {
         switch expression {
         case let parenthesized as ASTParenthesizedExpression:
-            return try evaluateParenthesizedExpression(parenthesized, stack: stack)
+            return try evaluateParenthesizedExpression(parenthesized, environment: environment)
             
         case let identifier as ASTIdentifierExpression:
-            return try evaluateIdentifierExpression(identifier, stack: stack)
+            return try evaluateIdentifierExpression(identifier, environment: environment)
             
         case let int as ASTIntLiteralExpression:
             return try evaluateIntLiteralExpression(int)
@@ -60,12 +60,12 @@ extension Evaluator {
         }
     }
     
-    class func evaluateParenthesizedExpression(_ expression: ASTParenthesizedExpression, stack: Stack) throws -> RValue {
-        return try evaluateExpression(expression.expression, stack: stack)
+    class func evaluateParenthesizedExpression(_ expression: ASTParenthesizedExpression, environment: Environment) throws -> RValue {
+        return try RValue(value: evaluateExpression(expression.expression, environment: environment))
     }
     
-    class func evaluateIdentifierExpression(_ expression: ASTIdentifierExpression, stack: Stack) throws -> LValue {
-        guard let variable = stack.localVariable(named: expression.name) else {
+    class func evaluateIdentifierExpression(_ expression: ASTIdentifierExpression, environment: Environment) throws -> LValue {
+        guard let variable = environment.localVariable(named: expression.name) else {
             throw EvaluatorError.unrecognizedIdentifier
         }
         return LValue(variable: variable)

@@ -11,7 +11,10 @@ import Foundation
 enum EvaluatorError: Error {
     case unrecognizedStatement
     
-    case variableAlreadyDeclared
+    case invalidCondition
+    case unrecognizedElseClause
+    
+    case invalidRedeclaration
     
     case unrecognizedExpression
     case unrecognizedPrimaryExpression
@@ -30,21 +33,18 @@ enum EvaluatorError: Error {
 class Evaluator {
     
     let input: EvaluatorInput
-    let debugOutput: (String) -> Void
+    let debugOutput: EvaluatorDebugOutput
     
-    let stack: Stack
-    
-    init(input: EvaluatorInput, debugOutput: @escaping (String) -> Void) {
+    init(input: EvaluatorInput, debugOutput: EvaluatorDebugOutput) {
         self.input = input
         self.debugOutput = debugOutput
-        
-        stack = Stack()
-        stack.pushFrame()
     }
     
     func evaluate() throws {
+        let env = Environment(enclosingEnvironment: nil)
+        
         while let statement = input.nextStatement() {
-            try evaluateStatement(statement)
+            try Evaluator.evaluateStatement(statement, environment: env, debugOutput: debugOutput)
         }
     }
     

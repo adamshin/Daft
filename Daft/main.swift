@@ -21,9 +21,10 @@ func repl() {
     let parser = Parser(input: parserInput)
     
     let evaluatorInput = EvaluatorParserInput(parser: parser)
-    let evaluator = Evaluator(input: evaluatorInput) {
+    let debugOutput = EvaluatorDebugOutput() {
         print($0)
     }
+    let evaluator = Evaluator(input: evaluatorInput, debugOutput: debugOutput)
     
     do {
         try evaluator.evaluate()
