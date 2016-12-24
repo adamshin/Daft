@@ -42,7 +42,7 @@ class EvaluatorParserInput: EvaluatorInput {
             return try parser.nextStatement()
         }
         catch let error {
-            NSLog("Error parsing input: \(error)")
+            print("Error parsing input: \(error)")
             return nil
         }
     }

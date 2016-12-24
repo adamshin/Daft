@@ -6,8 +6,6 @@
 //  Copyright © 2016 Adam Shin. All rights reserved.
 //
 
-import Foundation
-
 import XCTest
 @testable import Daft
 

@@ -43,10 +43,10 @@ class EvaluatorBinarySeriesTests: XCTestCase {
                     postfix(intLiteral("5")),
                     postfix(intLiteral("2")),
                     postfix(intLiteral("1")),
-                    ], [
-                        binaryOperator(.subtraction),
-                        binaryOperator(.addition),
-                        ]),
+                ], [
+                    binaryOperator(.subtraction),
+                    binaryOperator(.addition),
+                ]),
                 expected: RValue(value: .int(4))
             ),
             EvaluatorBinarySeriesTestCase(

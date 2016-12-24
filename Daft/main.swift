@@ -20,12 +20,16 @@ func repl() {
     let parserInput = ParserLexerInput(lexer: lexer)
     let parser = Parser(input: parserInput)
     
+    let evaluatorInput = EvaluatorParserInput(parser: parser)
+    let evaluator = Evaluator(input: evaluatorInput) {
+        print($0)
+    }
+    
     do {
-        let statements = try parser.allStatements()
-        print(String(describing: statements))
+        try evaluator.evaluate()
     }
     catch let error {
-        NSLog("Error parsing input: \(error)")
+        print("Error evaluating input: \(error)")
     }
 }
 

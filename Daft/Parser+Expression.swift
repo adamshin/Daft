@@ -85,6 +85,10 @@ extension Parser {
             input.consumeToken()
             return ASTStringLiteralExpression(literal: literal)
             
+        case let .boolLiteral(value):
+            input.consumeToken()
+            return ASTBoolLiteralExpression(value: value)
+            
         case let .identifier(name):
             input.consumeToken()
             return ASTIdentifierExpression(name: name)

@@ -88,6 +88,10 @@ struct ASTStringLiteralExpression: ASTPrimaryExpression {
     let literal: String
 }
 
+struct ASTBoolLiteralExpression: ASTPrimaryExpression {
+    let value: Bool
+}
+
 struct ASTIdentifierExpression: ASTPrimaryExpression {
     let name: String
 }

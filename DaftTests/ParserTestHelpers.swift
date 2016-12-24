@@ -98,7 +98,7 @@ func whileStatement(_ condition: ASTConditionClause, _ codeBlock: ASTCodeBlock) 
 
 // MARK: - Expressions
 
-func binarySeries(_ expression: ASTPostfixExpression) -> ASTExpression {
+func binarySeries(_ expression: ASTPostfixExpression) -> ASTBinarySeriesExpression {
     return ASTBinarySeriesExpression(expressions: [expression], operators: [])
 }
 

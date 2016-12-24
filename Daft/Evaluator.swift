@@ -9,16 +9,18 @@
 import Foundation
 
 enum EvaluatorError: Error {
-    case unrecognizedIdentifier
-    case invalidIntLiteral
-    
-    case invalidBinaryOperatorParameters
-    case invalidAssignment
+    case unrecognizedStatement
     
     case unrecognizedExpression
     case unrecognizedPrimaryExpression
     
     case invalidBinarySeriesExpression
+    
+    case invalidBinaryOperatorParameters
+    case invalidAssignment
+    
+    case unrecognizedIdentifier
+    case invalidIntLiteral
     
     case internalError
 }
@@ -26,13 +28,41 @@ enum EvaluatorError: Error {
 class Evaluator {
     
     let input: EvaluatorInput
+    let debugOutput: (String) -> Void
     
-    init(input: EvaluatorInput) {
+    let stack: Stack
+    
+    init(input: EvaluatorInput, debugOutput: @escaping (String) -> Void) {
         self.input = input
+        self.debugOutput = debugOutput
+        
+        stack = Stack()
     }
     
-    func evaluateNextStatement() throws {
-        // Do something
+    func evaluate() throws {
+        while let statement = input.nextStatement() {
+            switch statement {
+            case let expressionStatement as ASTExpressionStatement:
+                try evaluateExpressionStatement(expressionStatement)
+                
+            case let declarationStatement as ASTVariableDeclarationStatement:
+                try evaluateVariableDeclarationStatement(declarationStatement)
+                
+            default:
+                throw EvaluatorError.unrecognizedStatement
+            }
+        }
+    }
+    
+    // MARK: - Statement
+    
+    func evaluateExpressionStatement(_ statement: ASTExpressionStatement) throws {
+        let result = try Evaluator.evaluateExpression(statement.expression, stack: stack)
+        debugOutput(String(describing: result))
+    }
+    
+    func evaluateVariableDeclarationStatement(_ statement: ASTVariableDeclarationStatement) throws {
+        debugOutput("TODO: Implement variable declaration evaluation")
     }
     
     // MARK: - Expression
@@ -65,14 +95,20 @@ class Evaluator {
     
     class func evaluatePrimaryExpression(_ expression: ASTPrimaryExpression, stack: Stack) throws -> ValueType {
         switch expression {
-        case let id as ASTIdentifierExpression:
-            return try evaluateIdentifierExpression(id, stack: stack)
+        case let parenthesized as ASTParenthesizedExpression:
+            return try evaluateParenthesizedExpression(parenthesized, stack: stack)
+            
+        case let identifier as ASTIdentifierExpression:
+            return try evaluateIdentifierExpression(identifier, stack: stack)
             
         case let int as ASTIntLiteralExpression:
             return try evaluateIntLiteralExpression(int)
             
         case let string as ASTStringLiteralExpression:
             return evaluateStringLiteralExpression(string)
+            
+        case let bool as ASTBoolLiteralExpression:
+            return evaluateBoolLiteralExpression(bool)
             
         default:
             throw EvaluatorError.unrecognizedPrimaryExpression
@@ -99,6 +135,10 @@ class Evaluator {
     
     class func evaluateStringLiteralExpression(_ expression: ASTStringLiteralExpression) -> RValue {
         return RValue(value: .string(expression.literal))
+    }
+    
+    class func evaluateBoolLiteralExpression(_ expression: ASTBoolLiteralExpression) -> RValue {
+        return RValue(value: .bool(expression.value))
     }
     
 }

@@ -26,122 +26,122 @@ extension Evaluator {
         }
     }
     
-    private class func evaluateAddition(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return addInts(a, b)
-            
-        case let (.string(a), .string(b)):
-            return addStrings(a, b)
-            
-        case let (.string(a), .int(b)):
-            return addStrings(a, String(b))
-            
-        case let (.int(a), .string(b)):
-            return addStrings(String(a), b)
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateSubtraction(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return subtractInts(a, b)
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateMultiplication(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return multiplyInts(a, b)
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateDivision(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return divideInts(a, b)
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateLessThan(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return RValue(value: .bool(a < b))
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateGreaterThan(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return RValue(value: .bool(a > b))
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateEquality(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        switch (lhs.value, rhs.value) {
-        case let (.int(a), .int(b)):
-            return RValue(value: .bool(a == b))
-            
-        case let (.bool(a), .bool(b)):
-            return RValue(value: .bool(a == b))
-            
-        case let (.string(a), .string(b)):
-            return RValue(value: .bool(a == b))
-            
-        default:
-            throw EvaluatorError.invalidBinaryOperatorParameters
-        }
-    }
-    
-    private class func evaluateAssignment(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
-        guard let assignee = lhs as? LValue else {
-            throw EvaluatorError.invalidAssignment
-        }
-        
-        assignee.assign(rhs.value)
-        return RValue(value: rhs.value)
-    }
-    
 }
 
-extension Evaluator {
+// MARK: - Operator Evaluation
 
-    fileprivate class func addInts(_ a: Int, _ b: Int) -> RValue {
-        return RValue(value: .int(a + b))
+private func evaluateAddition(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return addInts(a, b)
+        
+    case let (.string(a), .string(b)):
+        return addStrings(a, b)
+        
+    case let (.string(a), .int(b)):
+        return addStrings(a, String(b))
+        
+    case let (.int(a), .string(b)):
+        return addStrings(String(a), b)
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
     }
+}
 
-    fileprivate class func addStrings(_ a: String, _ b: String) -> RValue {
-        return RValue(value: .string(a + b))
+private func evaluateSubtraction(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return subtractInts(a, b)
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
     }
+}
 
-    fileprivate class func subtractInts(_ a: Int, _ b: Int) -> RValue {
-        return RValue(value: .int(a - b))
+private func evaluateMultiplication(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return multiplyInts(a, b)
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
+    }
+}
+
+private func evaluateDivision(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return divideInts(a, b)
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
+    }
+}
+
+private func evaluateLessThan(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return RValue(value: .bool(a < b))
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
+    }
+}
+
+private func evaluateGreaterThan(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return RValue(value: .bool(a > b))
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
+    }
+}
+
+private func evaluateEquality(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    switch (lhs.value, rhs.value) {
+    case let (.int(a), .int(b)):
+        return RValue(value: .bool(a == b))
+        
+    case let (.bool(a), .bool(b)):
+        return RValue(value: .bool(a == b))
+        
+    case let (.string(a), .string(b)):
+        return RValue(value: .bool(a == b))
+        
+    default:
+        throw EvaluatorError.invalidBinaryOperatorParameters
+    }
+}
+
+private func evaluateAssignment(_ lhs: ValueType, _ rhs: ValueType) throws -> RValue {
+    guard let assignee = lhs as? LValue else {
+        throw EvaluatorError.invalidAssignment
     }
     
-    fileprivate class func multiplyInts(_ a: Int, _ b: Int) -> RValue {
-        return RValue(value: .int(a * b))
-    }
-    
-    fileprivate class func divideInts(_ a: Int, _ b: Int) -> RValue {
-        return RValue(value: .int(a / b))
-    }
+    assignee.assign(rhs.value)
+    return RValue(value: rhs.value)
+}
 
+// MARK: - Raw Operations
+
+private func addInts(_ a: Int, _ b: Int) -> RValue {
+    return RValue(value: .int(a + b))
+}
+
+private func addStrings(_ a: String, _ b: String) -> RValue {
+    return RValue(value: .string(a + b))
+}
+
+private func subtractInts(_ a: Int, _ b: Int) -> RValue {
+    return RValue(value: .int(a - b))
+}
+
+private func multiplyInts(_ a: Int, _ b: Int) -> RValue {
+    return RValue(value: .int(a * b))
+}
+
+private func divideInts(_ a: Int, _ b: Int) -> RValue {
+    return RValue(value: .int(a / b))
 }

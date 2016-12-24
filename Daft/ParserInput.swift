@@ -51,7 +51,7 @@ class ParserLexerInput: ParserInput {
                 storedToken = try lexer.nextToken()
             }
             catch let error {
-                NSLog("Error lexing input: \(error)")
+                print("Error lexing input: \(error)")
             }
         }
         return storedToken
