@@ -11,6 +11,8 @@ import Foundation
 enum EvaluatorError: Error {
     case unrecognizedStatement
     
+    case variableAlreadyDeclared
+    
     case unrecognizedExpression
     case unrecognizedPrimaryExpression
     
@@ -37,6 +39,7 @@ class Evaluator {
         self.debugOutput = debugOutput
         
         stack = Stack()
+        stack.pushFrame()
     }
     
     func evaluate() throws {

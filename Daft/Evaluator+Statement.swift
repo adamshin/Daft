@@ -24,12 +24,29 @@ extension Evaluator {
     }
     
     func evaluateExpressionStatement(_ statement: ASTExpressionStatement) throws {
-        let result = try Evaluator.evaluateExpression(statement.expression, stack: stack)
-        debugOutput(String(describing: result))
+        let value = try Evaluator.evaluateExpression(statement.expression, stack: stack)
+        debugOutput(stringForObjectValue(value.value))
     }
     
     func evaluateVariableDeclarationStatement(_ statement: ASTVariableDeclarationStatement) throws {
-        debugOutput("TODO: Implement variable declaration evaluation")
+        let initialValue: ObjectValue
+        if let expression = statement.expression {
+            initialValue = try Evaluator.evaluateExpression(expression, stack: stack).value
+        } else {
+            initialValue = .void
+        }
+        
+        try stack.addLocalVariable(name: statement.name, value: initialValue)
+        debugOutput("\(statement.name) = \(stringForObjectValue(initialValue))")
     }
     
+}
+
+private func stringForObjectValue(_ value: ObjectValue) -> String {
+    switch value {
+    case .void: return "void"
+    case let .int(value): return String(value)
+    case let .string(value): return "\"\(value)\""
+    case let .bool(value): return String(value)
+    }
 }
