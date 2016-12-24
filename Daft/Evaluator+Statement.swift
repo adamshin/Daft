@@ -15,7 +15,8 @@ extension Evaluator {
         case let ifStatement as ASTIfStatement:
             try evaluateIfStatement(ifStatement, environment: environment, debugOutput: debugOutput)
             
-        // TODO: While statements
+        case let whileStatement as ASTWhileStatement:
+            try evaluateWhileStatement(whileStatement, environment: environment, debugOutput: debugOutput)
             
         case let declarationStatement as ASTVariableDeclarationStatement:
             try evaluateVariableDeclarationStatement(declarationStatement, environment: environment, debugOutput: debugOutput)
@@ -53,6 +54,23 @@ extension Evaluator {
             
         default:
             throw EvaluatorError.unrecognizedElseClause
+        }
+    }
+    
+    // MARK: - While
+    
+    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+        while true {
+            let condition = try evaluateExpression(statement.condition.expression, environment: environment)
+            guard case let .bool(boolValue) = condition else {
+                throw EvaluatorError.invalidCondition
+            }
+            
+            if boolValue {
+                try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput)
+            } else {
+                break
+            }
         }
     }
     
