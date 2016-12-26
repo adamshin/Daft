@@ -11,10 +11,7 @@ import Foundation
 func repl() {
     print("Daft")
     
-    let lexerInput = LexerLiveInput() {
-        print("  > ", terminator: "")
-        return readLine() ?? ""
-    }
+    let lexerInput = LexerFileInput(fileName: "Daft/input.txt")
     let lexer = Lexer(input: lexerInput)
     
     let parserInput = ParserLexerInput(lexer: lexer)

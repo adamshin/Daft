@@ -37,13 +37,8 @@ class LexerStringInput: LexerInput {
 
 class LexerLiveInput: LexerInput {
     
-    let fetchInput: () -> String
     var buffer = ""
     var finished = false
-    
-    init(fetchInput: @escaping () -> String) {
-        self.fetchInput = fetchInput
-    }
     
     func nextChar() -> Character? {
         if finished { return nil }
@@ -66,6 +61,44 @@ class LexerLiveInput: LexerInput {
         if !buffer.isEmpty {
             buffer.remove(at: buffer.startIndex)
         }
+    }
+    
+    private func fetchInput() -> String {
+        print("  > ", terminator: "")
+        return readLine() ?? ""
+    }
+    
+}
+
+class LexerFileInput: LexerInput {
+    
+    let string: String
+    var location: String.Index
+    
+    init(fileName: String) {
+        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            string = ""
+            location = string.startIndex
+            return
+        }
+        
+        let path = dir.appendingPathComponent(fileName)
+        do {
+            string = try String(contentsOf: path, encoding: String.Encoding.utf8)
+        } catch {
+            string = ""
+        }
+        location = string.startIndex
+    }
+    
+    func nextChar() -> Character? {
+        guard location < string.endIndex else { return nil }
+        return string[location]
+    }
+    
+    func consumeChar() {
+        guard location < string.endIndex else { return }
+        location = string.index(location, offsetBy: 1)
     }
     
 }
