@@ -80,6 +80,8 @@ class Lexer {
             
         case "true": return .boolLiteral(true)
         case "false": return .boolLiteral(false)
+            
+        case "void": return .voidLiteral
         
         default: return .identifier(string)
         }

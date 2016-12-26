@@ -99,8 +99,12 @@ extension Parser {
     func parseReturnStatement() throws -> ASTReturnStatement {
         try consume(.returnKeyword)
         
-        let expression = try parseExpression()
-        return ASTReturnStatement(expression: expression)
+        if input.nextToken() == .semicolon {
+            return ASTReturnStatement(expression: nil)
+        } else {
+            let expression = try parseExpression()
+            return ASTReturnStatement(expression: expression)
+        }
     }
     
 }

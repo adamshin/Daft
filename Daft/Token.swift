@@ -13,6 +13,7 @@ enum Token {
     case intLiteral(String)
     case stringLiteral(String)
     case boolLiteral(Bool)
+    case voidLiteral
     
     case binaryOperator(BinaryOperator)
     
@@ -41,6 +42,7 @@ func ==(lhs: Token, rhs: Token) -> Bool {
     case (.intLiteral(let a), .intLiteral(let b)) where a == b: return true
     case (.boolLiteral(let a), .boolLiteral(let b)) where a == b: return true
     case (.stringLiteral(let a), .stringLiteral(let b)) where a == b: return true
+    case (.voidLiteral, .voidLiteral): return true
         
     case (.binaryOperator(let a), .binaryOperator(let b)) where a == b: return true
         

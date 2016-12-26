@@ -48,7 +48,7 @@ class Evaluator {
         
         while let statement = input.nextStatement() {
             if let returnValue = try Evaluator.evaluateStatement(statement, environment: env) {
-                print("Program returned \(Evaluator.stringForObjectValue(returnValue))\n")
+                print("Program returned \(Evaluator.stringForValue(returnValue))\n")
                 break
             }
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ObjectValue {
+enum Value {
     case void
     case int(Int)
     case bool(Bool)
@@ -18,22 +18,22 @@ enum ObjectValue {
 }
 
 protocol ValueType {
-    var value: ObjectValue { get }
+    var value: Value { get }
 }
 
 struct LValue: ValueType {
     
     let variable: LocalVariable
     
-    func assign(_ value: ObjectValue) {
+    func assign(_ value: Value) {
         variable.value = value
     }
     
-    var value: ObjectValue { return variable.value }
+    var value: Value { return variable.value }
 }
 
 struct RValue: ValueType {
     
-    let value: ObjectValue
+    let value: Value
     
 }

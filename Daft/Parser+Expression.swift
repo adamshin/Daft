@@ -95,6 +95,10 @@ extension Parser {
             input.consumeToken()
             return ASTBoolLiteralExpression(value: value)
             
+        case .voidLiteral:
+            input.consumeToken()
+            return ASTVoidLiteralExpression()
+            
         default:
             throw ParserError.unexpectedToken
         }

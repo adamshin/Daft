@@ -10,7 +10,7 @@ import Foundation
 
 extension Evaluator {
     
-    class func evaluateStatement(_ statement: ASTStatement, environment: Environment) throws -> ObjectValue? {
+    class func evaluateStatement(_ statement: ASTStatement, environment: Environment) throws -> Value? {
         switch statement {
         case let returnStatement as ASTReturnStatement:
             return try evaluateReturnStatement(returnStatement, environment: environment)
@@ -36,7 +36,7 @@ extension Evaluator {
     
     // MARK: - If
     
-    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment) throws -> ObjectValue? {
+    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment) throws -> Value? {
         let condition = try evaluateExpression(statement.condition.expression, environment: environment)
         guard case let .bool(boolValue) = condition else {
             throw EvaluatorError.invalidCondition
@@ -50,7 +50,7 @@ extension Evaluator {
         return nil
     }
     
-    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment) throws -> ObjectValue? {
+    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment) throws -> Value? {
         switch elseClause {
         case let elseIfClause as ASTElseIfClause:
             return try evaluateIfStatement(elseIfClause.ifStatement, environment: environment)
@@ -65,7 +65,7 @@ extension Evaluator {
     
     // MARK: - While
     
-    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment) throws -> ObjectValue? {
+    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment) throws -> Value? {
         while true {
             let condition = try evaluateExpression(statement.condition.expression, environment: environment)
             guard case let .bool(boolValue) = condition else {
@@ -86,33 +86,39 @@ extension Evaluator {
     // MARK: - Variable Declaration
     
     class func evaluateVariableDeclarationStatement(_ statement: ASTVariableDeclarationStatement, environment: Environment) throws {
-        let initialValue: ObjectValue
+        try environment.addLocalVariable(name: statement.name, value: .void)
+        
+        let initialValue: Value
         if let expression = statement.expression {
             initialValue = try Evaluator.evaluateExpression(expression, environment: environment)
         } else {
             initialValue = .void
         }
         
-        try environment.addLocalVariable(name: statement.name, value: initialValue)
-        print("\(statement.name) = \(stringForObjectValue(initialValue))")
+        environment.localVariable(named: statement.name)?.value = initialValue
+        print("\(statement.name) = \(stringForValue(initialValue))")
     }
     
     // MARK: - Return
     
-    class func evaluateReturnStatement(_ statement: ASTReturnStatement, environment: Environment) throws -> ObjectValue {
-        return try evaluateExpression(statement.expression, environment: environment)
+    class func evaluateReturnStatement(_ statement: ASTReturnStatement, environment: Environment) throws -> Value {
+        if let expression = statement.expression {
+            return try evaluateExpression(expression, environment: environment)
+        } else {
+            return .void
+        }
     }
     
     // MARK: - Expression
     
     class func evaluateExpressionStatement(_ statement: ASTExpressionStatement, environment: Environment) throws {
         let value = try evaluateExpression(statement.expression, environment: environment)
-        print(stringForObjectValue(value))
+        print(stringForValue(value))
     }
     
     // MARK: - Helpers
 
-    class func stringForObjectValue(_ value: ObjectValue) -> String {
+    class func stringForValue(_ value: Value) -> String {
         switch value {
         case .void: return "void"
         case let .int(value): return String(value)

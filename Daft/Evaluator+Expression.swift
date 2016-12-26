@@ -12,7 +12,7 @@ extension Evaluator {
     
     // MARK: - Expression
     
-    class func evaluateExpression(_ expression: ASTExpression, environment: Environment) throws -> ObjectValue {
+    class func evaluateExpression(_ expression: ASTExpression, environment: Environment) throws -> Value {
         let result: ValueType
         
         switch expression {
@@ -63,6 +63,9 @@ extension Evaluator {
             
         case let bool as ASTBoolLiteralExpression:
             return evaluateBoolLiteralExpression(bool)
+            
+        case is ASTVoidLiteralExpression:
+            return RValue(value: .void)
             
         default:
             throw EvaluatorError.unrecognizedPrimaryExpression

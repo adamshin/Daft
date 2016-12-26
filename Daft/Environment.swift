@@ -21,7 +21,7 @@ class Environment {
         self.enclosingEnvironment = enclosingEnvironment
     }
     
-    func addLocalVariable(name: String, value: ObjectValue) throws {
+    func addLocalVariable(name: String, value: Value) throws {
         guard localVariables[name] == nil else {
             throw EnvironmentError.invalidRedeclaration
         }
@@ -36,9 +36,9 @@ class Environment {
 
 class LocalVariable {
     
-    var value: ObjectValue
+    var value: Value
     
-    init(value: ObjectValue) {
+    init(value: Value) {
         self.value = value
     }
     

@@ -55,7 +55,7 @@ struct ASTWhileStatement: ASTStatement {
 }
 
 struct ASTReturnStatement: ASTStatement {
-    let expression: ASTExpression
+    let expression: ASTExpression?
 }
 
 // MARK: - Expressions
@@ -104,6 +104,8 @@ struct ASTStringLiteralExpression: ASTPrimaryExpression {
 struct ASTBoolLiteralExpression: ASTPrimaryExpression {
     let value: Bool
 }
+
+struct ASTVoidLiteralExpression: ASTPrimaryExpression { }
 
 struct ASTIdentifierExpression: ASTPrimaryExpression {
     let name: String
