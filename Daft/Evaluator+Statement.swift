@@ -10,19 +10,24 @@ import Foundation
 
 extension Evaluator {
     
-    class func evaluateStatement(_ statement: ASTStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateStatement(_ statement: ASTStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
         switch statement {
+        case let returnStatement as ASTReturnStatement:
+            return try evaluateReturnStatement(returnStatement, environment: environment, debugOutput: debugOutput)
+            
         case let ifStatement as ASTIfStatement:
-            try evaluateIfStatement(ifStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateIfStatement(ifStatement, environment: environment, debugOutput: debugOutput)
             
         case let whileStatement as ASTWhileStatement:
-            try evaluateWhileStatement(whileStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateWhileStatement(whileStatement, environment: environment, debugOutput: debugOutput)
             
         case let declarationStatement as ASTVariableDeclarationStatement:
             try evaluateVariableDeclarationStatement(declarationStatement, environment: environment, debugOutput: debugOutput)
+            return nil
             
         case let expressionStatement as ASTExpressionStatement:
             try evaluateExpressionStatement(expressionStatement, environment: environment, debugOutput: debugOutput)
+            return nil
             
         default:
             throw EvaluatorError.unrecognizedStatement
@@ -31,26 +36,27 @@ extension Evaluator {
     
     // MARK: - If
     
-    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
         let condition = try evaluateExpression(statement.condition.expression, environment: environment)
         guard case let .bool(boolValue) = condition else {
             throw EvaluatorError.invalidCondition
         }
         
         if boolValue {
-            try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput)
+            return try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput)
         } else if let elseClause = statement.elseClause {
-            try evaluateElseClause(elseClause, environment: environment, debugOutput: debugOutput)
+            return try evaluateElseClause(elseClause, environment: environment, debugOutput: debugOutput)
         }
+        return nil
     }
     
-    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
         switch elseClause {
         case let elseIfClause as ASTElseIfClause:
-            try evaluateIfStatement(elseIfClause.ifStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateIfStatement(elseIfClause.ifStatement, environment: environment, debugOutput: debugOutput)
             
         case let finalElseClause as ASTFinalElseClause:
-            try evaluateCodeBlock(finalElseClause.codeBlock, environment: environment, debugOutput: debugOutput)
+            return try evaluateCodeBlock(finalElseClause.codeBlock, environment: environment, debugOutput: debugOutput)
             
         default:
             throw EvaluatorError.unrecognizedElseClause
@@ -59,7 +65,7 @@ extension Evaluator {
     
     // MARK: - While
     
-    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
         while true {
             let condition = try evaluateExpression(statement.condition.expression, environment: environment)
             guard case let .bool(boolValue) = condition else {
@@ -67,11 +73,14 @@ extension Evaluator {
             }
             
             if boolValue {
-                try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput)
+                if let returnValue = try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput) {
+                    return returnValue
+                }
             } else {
                 break
             }
         }
+        return nil
     }
     
     // MARK: - Variable Declaration
@@ -88,6 +97,12 @@ extension Evaluator {
         debugOutput.print("\(statement.name) = \(stringForObjectValue(initialValue))")
     }
     
+    // MARK: - Return
+    
+    class func evaluateReturnStatement(_ statement: ASTReturnStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue {
+        return try evaluateExpression(statement.expression, environment: environment)
+    }
+    
     // MARK: - Expression
     
     class func evaluateExpressionStatement(_ statement: ASTExpressionStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
@@ -95,17 +110,19 @@ extension Evaluator {
         debugOutput.print(stringForObjectValue(value))
     }
     
-}
+    // MARK: - Helpers
 
-private func stringForObjectValue(_ value: ObjectValue) -> String {
-    switch value {
-    case .void: return "void"
-    case let .int(value): return String(value)
-    case let .string(value): return "\"\(value)\""
-    case let .bool(value): return String(value)
-        
-    case let .function(argumentList, _, _):
-        let argumentCount = argumentList.arguments.count
-        return "function (\(argumentCount) \(argumentCount == 1 ? "argument" : "arguments"))"
+    class func stringForObjectValue(_ value: ObjectValue) -> String {
+        switch value {
+        case .void: return "void"
+        case let .int(value): return String(value)
+        case let .string(value): return "\"\(value)\""
+        case let .bool(value): return String(value)
+            
+        case let .function(argumentList, _, _):
+            let argumentCount = argumentList.arguments.count
+            return "function (\(argumentCount) \(argumentCount == 1 ? "argument" : "arguments"))"
+        }
     }
+
 }

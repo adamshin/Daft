@@ -76,6 +76,7 @@ class Lexer {
         
         case "func": return .funcKeyword
         case "var": return .varKeyword
+        case "return": return .returnKeyword
             
         case "true": return .boolLiteral(true)
         case "false": return .boolLiteral(false)

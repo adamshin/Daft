@@ -22,6 +22,7 @@ enum Token {
     
     case varKeyword
     case funcKeyword
+    case returnKeyword
     
     case leftParen
     case rightParen
@@ -49,6 +50,7 @@ func ==(lhs: Token, rhs: Token) -> Bool {
         
     case (.varKeyword, .varKeyword): return true
     case (.funcKeyword, .funcKeyword): return true
+    case (.returnKeyword, .returnKeyword): return true
         
     case (.leftParen, .leftParen): return true
     case (.rightParen, .rightParen): return true

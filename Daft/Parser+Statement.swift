@@ -25,6 +25,11 @@ extension Parser {
             try consume(.semicolon)
             return statement
             
+        case .returnKeyword:
+            let statement = try parseReturnStatement()
+            try consume(.semicolon)
+            return statement
+            
         default:
             let statement = try parseExpressionStatement()
             try consume(.semicolon)
@@ -89,6 +94,13 @@ extension Parser {
         let codeBlock = try parseCodeBlock()
         
         return ASTWhileStatement(condition: condition, codeBlock: codeBlock)
+    }
+    
+    func parseReturnStatement() throws -> ASTReturnStatement {
+        try consume(.returnKeyword)
+        
+        let expression = try parseExpression()
+        return ASTReturnStatement(expression: expression)
     }
     
 }

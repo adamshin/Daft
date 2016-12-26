@@ -54,6 +54,10 @@ struct ASTWhileStatement: ASTStatement {
     let codeBlock: ASTCodeBlock
 }
 
+struct ASTReturnStatement: ASTStatement {
+    let expression: ASTExpression
+}
+
 // MARK: - Expressions
 
 struct ASTBinarySeriesExpression: ASTExpression {

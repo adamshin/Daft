@@ -26,10 +26,13 @@ extension Evaluator {
             try functionEnvironment.addLocalVariable(name: name, value: value)
         }
         
-        // TODO: Proper output. Figure out how to handle return statements
+        // TODO: Proper output
         let output = EvaluatorDebugOutput() { _ in }
-        try evaluateCodeBlock(codeBlock, environment: functionEnvironment, debugOutput: output)
-        return RValue(value: .void)
+        if let returnValue = try evaluateCodeBlock(codeBlock, environment: functionEnvironment, debugOutput: output) {
+            return RValue(value: returnValue)
+        } else {
+            return RValue(value: .void)
+        }
     }
     
 }
