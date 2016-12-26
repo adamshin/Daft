@@ -10,23 +10,23 @@ import Foundation
 
 extension Evaluator {
     
-    class func evaluateStatement(_ statement: ASTStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
+    class func evaluateStatement(_ statement: ASTStatement, environment: Environment) throws -> ObjectValue? {
         switch statement {
         case let returnStatement as ASTReturnStatement:
-            return try evaluateReturnStatement(returnStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateReturnStatement(returnStatement, environment: environment)
             
         case let ifStatement as ASTIfStatement:
-            return try evaluateIfStatement(ifStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateIfStatement(ifStatement, environment: environment)
             
         case let whileStatement as ASTWhileStatement:
-            return try evaluateWhileStatement(whileStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateWhileStatement(whileStatement, environment: environment)
             
         case let declarationStatement as ASTVariableDeclarationStatement:
-            try evaluateVariableDeclarationStatement(declarationStatement, environment: environment, debugOutput: debugOutput)
+            try evaluateVariableDeclarationStatement(declarationStatement, environment: environment)
             return nil
             
         case let expressionStatement as ASTExpressionStatement:
-            try evaluateExpressionStatement(expressionStatement, environment: environment, debugOutput: debugOutput)
+            try evaluateExpressionStatement(expressionStatement, environment: environment)
             return nil
             
         default:
@@ -36,27 +36,27 @@ extension Evaluator {
     
     // MARK: - If
     
-    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
+    class func evaluateIfStatement(_ statement: ASTIfStatement, environment: Environment) throws -> ObjectValue? {
         let condition = try evaluateExpression(statement.condition.expression, environment: environment)
         guard case let .bool(boolValue) = condition else {
             throw EvaluatorError.invalidCondition
         }
         
         if boolValue {
-            return try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput)
+            return try evaluateCodeBlock(statement.codeBlock, environment: environment)
         } else if let elseClause = statement.elseClause {
-            return try evaluateElseClause(elseClause, environment: environment, debugOutput: debugOutput)
+            return try evaluateElseClause(elseClause, environment: environment)
         }
         return nil
     }
     
-    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
+    class func evaluateElseClause(_ elseClause: ASTElseClause, environment: Environment) throws -> ObjectValue? {
         switch elseClause {
         case let elseIfClause as ASTElseIfClause:
-            return try evaluateIfStatement(elseIfClause.ifStatement, environment: environment, debugOutput: debugOutput)
+            return try evaluateIfStatement(elseIfClause.ifStatement, environment: environment)
             
         case let finalElseClause as ASTFinalElseClause:
-            return try evaluateCodeBlock(finalElseClause.codeBlock, environment: environment, debugOutput: debugOutput)
+            return try evaluateCodeBlock(finalElseClause.codeBlock, environment: environment)
             
         default:
             throw EvaluatorError.unrecognizedElseClause
@@ -65,7 +65,7 @@ extension Evaluator {
     
     // MARK: - While
     
-    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
+    class func evaluateWhileStatement(_ statement: ASTWhileStatement, environment: Environment) throws -> ObjectValue? {
         while true {
             let condition = try evaluateExpression(statement.condition.expression, environment: environment)
             guard case let .bool(boolValue) = condition else {
@@ -73,7 +73,7 @@ extension Evaluator {
             }
             
             if boolValue {
-                if let returnValue = try evaluateCodeBlock(statement.codeBlock, environment: environment, debugOutput: debugOutput) {
+                if let returnValue = try evaluateCodeBlock(statement.codeBlock, environment: environment) {
                     return returnValue
                 }
             } else {
@@ -85,7 +85,7 @@ extension Evaluator {
     
     // MARK: - Variable Declaration
     
-    class func evaluateVariableDeclarationStatement(_ statement: ASTVariableDeclarationStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateVariableDeclarationStatement(_ statement: ASTVariableDeclarationStatement, environment: Environment) throws {
         let initialValue: ObjectValue
         if let expression = statement.expression {
             initialValue = try Evaluator.evaluateExpression(expression, environment: environment)
@@ -94,20 +94,20 @@ extension Evaluator {
         }
         
         try environment.addLocalVariable(name: statement.name, value: initialValue)
-        debugOutput.print("\(statement.name) = \(stringForObjectValue(initialValue))")
+        print("\(statement.name) = \(stringForObjectValue(initialValue))")
     }
     
     // MARK: - Return
     
-    class func evaluateReturnStatement(_ statement: ASTReturnStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue {
+    class func evaluateReturnStatement(_ statement: ASTReturnStatement, environment: Environment) throws -> ObjectValue {
         return try evaluateExpression(statement.expression, environment: environment)
     }
     
     // MARK: - Expression
     
-    class func evaluateExpressionStatement(_ statement: ASTExpressionStatement, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
+    class func evaluateExpressionStatement(_ statement: ASTExpressionStatement, environment: Environment) throws {
         let value = try evaluateExpression(statement.expression, environment: environment)
-        debugOutput.print(stringForObjectValue(value))
+        print(stringForObjectValue(value))
     }
     
     // MARK: - Helpers

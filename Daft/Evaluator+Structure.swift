@@ -10,11 +10,11 @@ import Foundation
 
 extension Evaluator {
     
-    class func evaluateCodeBlock(_ block: ASTCodeBlock, environment: Environment, debugOutput: EvaluatorDebugOutput) throws -> ObjectValue? {
+    class func evaluateCodeBlock(_ block: ASTCodeBlock, environment: Environment) throws -> ObjectValue? {
         let blockEnvironment = Environment(enclosedBy: environment)
         
         for statement in block.statements {
-            if let returnValue = try evaluateStatement(statement, environment: blockEnvironment, debugOutput: debugOutput) {
+            if let returnValue = try evaluateStatement(statement, environment: blockEnvironment) {
                 return returnValue
             }
         }

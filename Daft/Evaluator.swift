@@ -38,19 +38,17 @@ enum EvaluatorError: Error {
 class Evaluator {
     
     let input: EvaluatorInput
-    let debugOutput: EvaluatorDebugOutput
     
-    init(input: EvaluatorInput, debugOutput: EvaluatorDebugOutput) {
+    init(input: EvaluatorInput) {
         self.input = input
-        self.debugOutput = debugOutput
     }
     
     func evaluate() throws {
         let env = Environment(enclosedBy: nil)
         
         while let statement = input.nextStatement() {
-            if let returnValue = try Evaluator.evaluateStatement(statement, environment: env, debugOutput: debugOutput) {
-                debugOutput.print("Program returned value \(Evaluator.stringForObjectValue(returnValue))\n")
+            if let returnValue = try Evaluator.evaluateStatement(statement, environment: env) {
+                print("Program returned \(Evaluator.stringForObjectValue(returnValue))\n")
                 break
             }
         }
