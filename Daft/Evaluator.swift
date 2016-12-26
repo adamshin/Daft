@@ -19,6 +19,11 @@ enum EvaluatorError: Error {
     case unrecognizedExpression
     case unrecognizedPrimaryExpression
     
+    case unrecognizedPostfix
+    
+    case invalidFunctionCall
+    case invalidFunctionArguments
+    
     case invalidBinarySeriesExpression
     
     case invalidBinaryOperatorParameters
@@ -41,7 +46,7 @@ class Evaluator {
     }
     
     func evaluate() throws {
-        let env = Environment(enclosingEnvironment: nil)
+        let env = Environment(enclosedBy: nil)
         
         while let statement = input.nextStatement() {
             try Evaluator.evaluateStatement(statement, environment: env, debugOutput: debugOutput)

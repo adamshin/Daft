@@ -40,7 +40,7 @@ extension Parser {
         
         while input.nextToken() != nil {
             if input.nextToken() == .leftParen {
-                try postfixes.append(parseArgumentList())
+                try postfixes.append(parseFunctionCallArgumentList())
             } else {
                 break
             }
@@ -48,12 +48,12 @@ extension Parser {
         return ASTPostfixExpression(primaryExpression: expression, postfixes: postfixes)
     }
     
-    func parseArgumentList() throws -> ASTArgumentList {
+    func parseFunctionCallArgumentList() throws -> ASTFunctionCallArgumentList {
         try consume(.leftParen)
         
         if input.nextToken() == .rightParen {
             input.consumeToken()
-            return ASTArgumentList(arguments: [])
+            return ASTFunctionCallArgumentList(arguments: [])
         }
         
         var arguments = [ASTExpression]()
@@ -65,7 +65,7 @@ extension Parser {
         }
         try consume(.rightParen)
         
-        return ASTArgumentList(arguments: arguments)
+        return ASTFunctionCallArgumentList(arguments: arguments)
     }
     
     // MARK: - Primary Expressions
@@ -76,6 +76,12 @@ extension Parser {
         switch token {
         case .leftParen:
             return try parseParenthesizedExpression()
+            
+        case .funcKeyword:
+            return try parseFunctionExpression()
+            
+        case .identifier(_):
+            return try parseIdentifier()
             
         case let .intLiteral(literal):
             input.consumeToken()
@@ -89,10 +95,6 @@ extension Parser {
             input.consumeToken()
             return ASTBoolLiteralExpression(value: value)
             
-        case let .identifier(name):
-            input.consumeToken()
-            return ASTIdentifierExpression(name: name)
-            
         default:
             throw ParserError.unexpectedToken
         }
@@ -104,6 +106,43 @@ extension Parser {
         try consume(.rightParen)
         
         return ASTParenthesizedExpression(expression: expression)
+    }
+    
+    func parseFunctionExpression() throws -> ASTFunctionExpression {
+        try consume(.funcKeyword)
+        
+        let argumentList = try parseArgumentList()
+        let codeBlock = try parseCodeBlock()
+        
+        return ASTFunctionExpression(argumentList: argumentList, codeBlock: codeBlock)
+    }
+    
+    func parseArgumentList() throws -> ASTArgumentList {
+        try consume(.leftParen)
+        
+        if input.nextToken() == .rightParen {
+            input.consumeToken()
+            return ASTArgumentList(arguments: [])
+        }
+        
+        var arguments = [ASTIdentifierExpression]()
+        try arguments.append(parseIdentifier())
+        
+        while input.nextToken() != .rightParen {
+            try consume(.comma)
+            try arguments.append(parseIdentifier())
+        }
+        try consume(.rightParen)
+        
+        return ASTArgumentList(arguments: arguments)
+    }
+    
+    func parseIdentifier() throws -> ASTIdentifierExpression {
+        guard let identifierToken = input.nextToken() else { throw ParserError.endOfFile }
+        guard case let .identifier(name) = identifierToken else { throw ParserError.unexpectedToken }
+        
+        input.consumeToken()
+        return ASTIdentifierExpression(name: name)
     }
     
 }

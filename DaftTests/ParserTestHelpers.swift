@@ -118,8 +118,8 @@ func postfix(_ primaryExpression: ASTPrimaryExpression, _ postfixes: [ASTPostfix
     return ASTPostfixExpression(primaryExpression: primaryExpression, postfixes: postfixes)
 }
 
-func argumentList(_ arguments: [ASTExpression]) -> ASTArgumentList {
-    return ASTArgumentList(arguments: arguments)
+func functionCallArgumentList(_ arguments: [ASTExpression]) -> ASTFunctionCallArgumentList {
+    return ASTFunctionCallArgumentList(arguments: arguments)
 }
 
 // MARK: - Primary expressions

@@ -13,6 +13,8 @@ enum ObjectValue {
     case int(Int)
     case bool(Bool)
     case string(String)
+    
+    case function(argumentList: ASTArgumentList, codeBlock: ASTCodeBlock, enclosingEnvironment: Environment)
 }
 
 protocol ValueType {

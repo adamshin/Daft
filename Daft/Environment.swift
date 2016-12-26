@@ -17,7 +17,7 @@ class Environment {
     let enclosingEnvironment: Environment?
     var localVariables = [String: LocalVariable]()
     
-    init(enclosingEnvironment: Environment?) {
+    init(enclosedBy enclosingEnvironment: Environment?) {
         self.enclosingEnvironment = enclosingEnvironment
     }
     

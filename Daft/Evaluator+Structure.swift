@@ -11,7 +11,7 @@ import Foundation
 extension Evaluator {
     
     class func evaluateCodeBlock(_ block: ASTCodeBlock, environment: Environment, debugOutput: EvaluatorDebugOutput) throws {
-        let blockEnvironment = Environment(enclosingEnvironment: environment)
+        let blockEnvironment = Environment(enclosedBy: environment)
         
         try block.statements.forEach {
             try evaluateStatement($0, environment: blockEnvironment, debugOutput: debugOutput)

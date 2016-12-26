@@ -70,7 +70,7 @@ struct ASTPostfixExpression {
     let postfixes: [ASTPostfix]
 }
 
-struct ASTArgumentList: ASTPostfix {
+struct ASTFunctionCallArgumentList: ASTPostfix {
     let arguments: [ASTExpression]
 }
 
@@ -78,6 +78,15 @@ struct ASTArgumentList: ASTPostfix {
 
 struct ASTParenthesizedExpression: ASTPrimaryExpression {
     let expression: ASTExpression
+}
+
+struct ASTFunctionExpression: ASTPrimaryExpression {
+    let argumentList: ASTArgumentList
+    let codeBlock: ASTCodeBlock
+}
+
+struct ASTArgumentList {
+    let arguments: [ASTIdentifierExpression]
 }
 
 struct ASTIntLiteralExpression: ASTPrimaryExpression {

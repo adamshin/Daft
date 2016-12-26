@@ -61,7 +61,7 @@ class ParserExpressionTests: XCTestCase {
                 expected: postfix(
                     identifier("b"),
                     [
-                        argumentList([])
+                        functionCallArgumentList([])
                     ]
                 )
             ),
@@ -70,8 +70,8 @@ class ParserExpressionTests: XCTestCase {
                 expected: postfix(
                     identifier("c"),
                     [
-                        argumentList([]),
-                        argumentList([]),
+                        functionCallArgumentList([]),
+                        functionCallArgumentList([]),
                     ]
                 )
             ),
@@ -79,28 +79,28 @@ class ParserExpressionTests: XCTestCase {
         testParser(testCases: testCases, errorCases: []) { try $0.parsePostfixExpression() }
     }
     
-    func testParseArgumentList() {
+    func testParseFunctionCallArgumentList() {
         let testCases = [
             ParserTestCase(
                 input: "()",
-                expected: argumentList([])
+                expected: functionCallArgumentList([])
             ),
             ParserTestCase(
                 input: "(spam)",
-                expected: argumentList([
+                expected: functionCallArgumentList([
                     binarySeries(postfix(identifier("spam")))
                 ])
             ),
             ParserTestCase(
                 input: "(ham, eggs)",
-                expected: argumentList([
+                expected: functionCallArgumentList([
                     binarySeries(postfix(identifier("ham"))),
                     binarySeries(postfix(identifier("eggs"))),
                 ])
             ),
             ParserTestCase(
                 input: "(2, 4, 8)",
-                expected: argumentList([
+                expected: functionCallArgumentList([
                     binarySeries(postfix(intLiteral("2"))),
                     binarySeries(postfix(intLiteral("4"))),
                     binarySeries(postfix(intLiteral("8"))),
@@ -114,7 +114,7 @@ class ParserExpressionTests: XCTestCase {
             ParserErrorCase(input: "(a,)", error: .unexpectedToken),
             ParserErrorCase(input: "(, b)", error: .unexpectedToken),
         ]
-        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseArgumentList() }
+        testParser(testCases: testCases, errorCases: errorCases) { try $0.parseFunctionCallArgumentList() }
     }
     
     // MARK: - Primary Expressions

@@ -103,5 +103,9 @@ private func stringForObjectValue(_ value: ObjectValue) -> String {
     case let .int(value): return String(value)
     case let .string(value): return "\"\(value)\""
     case let .bool(value): return String(value)
+        
+    case let .function(argumentList, _, _):
+        let argumentCount = argumentList.arguments.count
+        return "function (\(argumentCount) \(argumentCount == 1 ? "argument" : "arguments"))"
     }
 }

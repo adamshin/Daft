@@ -24,7 +24,7 @@ class ParserTests: XCTestCase {
                     ])),
                     expression(binarySeries(postfix(
                         identifier("hi"), [
-                            argumentList([])
+                            functionCallArgumentList([])
                         ]
                     ))),
                     expression(binarySeries([
@@ -42,7 +42,7 @@ class ParserTests: XCTestCase {
                         "foo",
                         binarySeries(postfix(
                             identifier("bar"), [
-                                argumentList([
+                                functionCallArgumentList([
                                     binarySeries(postfix(intLiteral("5")))
                                 ])
                             ]

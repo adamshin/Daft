@@ -57,6 +57,8 @@
 		66DB70FE1DF90B6E00FF3A5B /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EC1DF900A000FF3A5B /* Lexer.swift */; };
 		66DB70FF1DF90B6E00FF3A5B /* LexerInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70EE1DF900D200FF3A5B /* LexerInput.swift */; };
 		66DB71001DF90B6E00FF3A5B /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DB70F01DF902A700FF3A5B /* Token.swift */; };
+		66EA734E1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EA734D1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift */; };
+		66EA734F1E10AA7000D36B16 /* Evaluator+FunctionCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EA734D1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -105,6 +107,7 @@
 		66DB70F61DF9062800FF3A5B /* DaftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DB70F81DF9062800FF3A5B /* LexerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerTests.swift; sourceTree = "<group>"; };
 		66DB70FA1DF9062800FF3A5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66EA734D1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Evaluator+FunctionCall.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +155,7 @@
 				6605D8A71E0F16BE0070C89A /* Evaluator+Structure.swift */,
 				6605D89E1E0E3D820070C89A /* Evaluator+Statement.swift */,
 				6605D89C1E0E3D6F0070C89A /* Evaluator+Expression.swift */,
+				66EA734D1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift */,
 				668166071E07AFD800E97AF9 /* Evaluator+BinarySeries.swift */,
 				6605D8951E0E1F3C0070C89A /* Evaluator+Operator.swift */,
 				668166011E078C2C00E97AF9 /* EvaluatorInput.swift */,
@@ -345,6 +349,7 @@
 				6605D89D1E0E3D6F0070C89A /* Evaluator+Expression.swift in Sources */,
 				668166081E07AFD800E97AF9 /* Evaluator+BinarySeries.swift in Sources */,
 				668166021E078C2C00E97AF9 /* EvaluatorInput.swift in Sources */,
+				66EA734E1E10AA6D00D36B16 /* Evaluator+FunctionCall.swift in Sources */,
 				6605D89F1E0E3D820070C89A /* Evaluator+Statement.swift in Sources */,
 				6605D8961E0E1F3C0070C89A /* Evaluator+Operator.swift in Sources */,
 				668166001E078C0700E97AF9 /* Evaluator.swift in Sources */,
@@ -389,6 +394,7 @@
 				6605D8A01E0E3E9C0070C89A /* Evaluator+Statement.swift in Sources */,
 				6681660D1E07BB4600E97AF9 /* EvaluatorTestHelpers.swift in Sources */,
 				6681660F1E07BB7500E97AF9 /* Evaluator+BinarySeries.swift in Sources */,
+				66EA734F1E10AA7000D36B16 /* Evaluator+FunctionCall.swift in Sources */,
 				668166121E07BB7500E97AF9 /* Value.swift in Sources */,
 				6650F1091E0605F60066C225 /* Parser+Statement.swift in Sources */,
 				66DB71001DF90B6E00FF3A5B /* Token.swift in Sources */,

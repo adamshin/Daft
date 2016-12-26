@@ -31,9 +31,15 @@ extension Evaluator {
     class func evaluatePostfixExpression(_ expression: ASTPostfixExpression, environment: Environment) throws -> ValueType {
         let primaryValue = try evaluatePrimaryExpression(expression.primaryExpression, environment: environment)
         
-        // TODO: evaluate postfixes if present and apply them
-        
-        return primaryValue
+        return try expression.postfixes.reduce(primaryValue) { value, postfix in
+            switch postfix {
+            case let functionCallArgumentList as ASTFunctionCallArgumentList:
+                return try evaluateFunctionCall(value: value, argumentList: functionCallArgumentList, environment: environment)
+                
+            default:
+                throw EvaluatorError.unrecognizedPostfix
+            }
+        }
     }
     
     // MARK: - Primary Expression
@@ -42,6 +48,9 @@ extension Evaluator {
         switch expression {
         case let parenthesized as ASTParenthesizedExpression:
             return try evaluateParenthesizedExpression(parenthesized, environment: environment)
+            
+        case let function as ASTFunctionExpression:
+            return try evaluateFunctionExpression(function, environment: environment)
             
         case let identifier as ASTIdentifierExpression:
             return try evaluateIdentifierExpression(identifier, environment: environment)
@@ -62,6 +71,10 @@ extension Evaluator {
     
     class func evaluateParenthesizedExpression(_ expression: ASTParenthesizedExpression, environment: Environment) throws -> RValue {
         return try RValue(value: evaluateExpression(expression.expression, environment: environment))
+    }
+    
+    class func evaluateFunctionExpression(_ expression: ASTFunctionExpression, environment: Environment) throws -> RValue {
+        return RValue(value: .function(argumentList: expression.argumentList, codeBlock: expression.codeBlock, enclosingEnvironment: environment))
     }
     
     class func evaluateIdentifierExpression(_ expression: ASTIdentifierExpression, environment: Environment) throws -> LValue {
