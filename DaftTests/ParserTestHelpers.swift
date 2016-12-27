@@ -96,6 +96,14 @@ func whileStatement(_ condition: ASTConditionClause, _ codeBlock: ASTCodeBlock) 
     return ASTWhileStatement(condition: condition, codeBlock: codeBlock)
 }
 
+func returnStatement() -> ASTReturnStatement {
+    return ASTReturnStatement(expression: nil)
+}
+
+func returnStatement(_ expression: ASTExpression) -> ASTReturnStatement {
+    return ASTReturnStatement(expression: expression)
+}
+
 // MARK: - Expressions
 
 func binarySeries(_ expression: ASTPostfixExpression) -> ASTBinarySeriesExpression {
@@ -128,12 +136,28 @@ func parenthesized(_ expression: ASTExpression) -> ASTParenthesizedExpression {
     return ASTParenthesizedExpression(expression: expression)
 }
 
+func function(_ argumentList: ASTArgumentList, _ codeBlock: ASTCodeBlock) -> ASTFunctionExpression {
+    return ASTFunctionExpression(argumentList: argumentList, codeBlock: codeBlock)
+}
+
+func argumentList(_ arguments: [ASTIdentifierExpression]) -> ASTArgumentList {
+    return ASTArgumentList(arguments: arguments)
+}
+
 func intLiteral(_ literal: String) -> ASTIntLiteralExpression {
     return ASTIntLiteralExpression(literal: literal)
 }
 
 func stringLiteral(_ literal: String) -> ASTStringLiteralExpression {
     return ASTStringLiteralExpression(literal: literal)
+}
+
+func boolLiteral(_ value: Bool) -> ASTBoolLiteralExpression {
+    return ASTBoolLiteralExpression(value: value)
+}
+
+func voidLiteral() -> ASTVoidLiteralExpression {
+    return ASTVoidLiteralExpression()
 }
 
 func identifier(_ name: String) -> ASTIdentifierExpression {

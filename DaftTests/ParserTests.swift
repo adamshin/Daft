@@ -36,6 +36,32 @@ class ParserTests: XCTestCase {
                 ]
             ),
             ParserTestCase(
+                input: "var f = func() { return 4; }; while (true) { f(); } return;",
+                expected: [
+                    variableDeclaration(
+                        "f",
+                        binarySeries(postfix(
+                            function(
+                                argumentList([]),
+                                codeBlock([
+                                    returnStatement(binarySeries(postfix(intLiteral("4"))))
+                                ])
+                            )
+                        ))
+                    ),
+                    whileStatement(
+                        condition(binarySeries(postfix(boolLiteral(true)))),
+                        codeBlock([
+                            expression(binarySeries(postfix(
+                                identifier("f"),
+                                [functionCallArgumentList([])]
+                            )))
+                        ])
+                    ),
+                    returnStatement(),
+                ]
+            ),
+            ParserTestCase(
                 input: "var foo = bar(5);",
                 expected: [
                     variableDeclaration(
@@ -51,7 +77,7 @@ class ParserTests: XCTestCase {
                 ]
             ),
             ParserTestCase(
-                input: "1 + (2 + 3) - 4;",
+                input: "1 + (2 + 3) - void;",
                 expected: [
                     expression(
                         binarySeries([
@@ -64,7 +90,7 @@ class ParserTests: XCTestCase {
                                     binaryOperator(.addition)
                                 ])
                             )),
-                            postfix(intLiteral("4")),
+                            postfix(voidLiteral()),
                         ], [
                             binaryOperator(.addition),
                             binaryOperator(.subtraction),

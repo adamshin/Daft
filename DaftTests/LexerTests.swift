@@ -101,11 +101,17 @@ private let testCases = [
             ]
     ),
     LexerTestCase(
-        input: "if else while",
+        input: "if else while func var return true false void",
         expected: [
             .ifKeyword,
             .elseKeyword,
             .whileKeyword,
+            .funcKeyword,
+            .varKeyword,
+            .returnKeyword,
+            .boolLiteral(true),
+            .boolLiteral(false),
+            .voidLiteral,
         ]
     ),
 ]

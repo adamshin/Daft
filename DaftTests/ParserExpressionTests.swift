@@ -122,6 +122,14 @@ class ParserExpressionTests: XCTestCase {
     func testParsePrimaryExpression() {
         let testCases = [
             ParserTestCase(
+                input: "(1)",
+                expected: parenthesized(binarySeries(postfix(intLiteral("1"))))
+            ),
+            ParserTestCase(
+                input: "bacon",
+                expected: identifier("bacon")
+            ),
+            ParserTestCase(
                 input: "5555",
                 expected: intLiteral("5555")
             ),
@@ -130,12 +138,12 @@ class ParserExpressionTests: XCTestCase {
                 expected: stringLiteral("hello world")
             ),
             ParserTestCase(
-                input: "bacon",
-                expected: identifier("bacon")
+                input: "void",
+                expected: voidLiteral()
             ),
             ParserTestCase(
-                input: "(1)",
-                expected: parenthesized(binarySeries(postfix(intLiteral("1"))))
+                input: "func() { }",
+                expected: function(argumentList([]), codeBlock([]))
             ),
         ]
         let errorCases = [
@@ -155,13 +163,13 @@ class ParserExpressionTests: XCTestCase {
                     binarySeries(postfix(identifier("banana")))
                 )
             ),
-        ]
+            ]
         let errorCases = [
             ParserErrorCase(input: "()", error: .unexpectedToken),
             ParserErrorCase(input: "a", error: .unexpectedToken),
             ParserErrorCase(input: "(a", error: .endOfFile),
             ParserErrorCase(input: "(a;", error: .unexpectedToken),
-        ]
+            ]
         testParser(testCases: testCases, errorCases: errorCases) { try $0.parseParenthesizedExpression() }
     }
 

@@ -33,7 +33,15 @@ class ParserStatementTests: XCTestCase {
                     ),
                     codeBlock([])
                 )
-            )
+            ),
+            ParserTestCase(
+                input: "return;",
+                expected: returnStatement()
+            ),
+            ParserTestCase(
+                input: "return 0;",
+                expected: returnStatement(binarySeries(postfix(intLiteral("0"))))
+            ),
         ]
         let errorCases = [
             ParserErrorCase(input: "foo", error: .endOfFile),
